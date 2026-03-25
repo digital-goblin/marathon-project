@@ -3,64 +3,1293 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MARATHON // FIELD GUIDE 2893</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<title>MARATHON // LORE COMPENDIUM 2893</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-/* ─── TOKENS ─────────────────────────────── */
 :root {
-  --bg:       #090909;
-  --surface:  #111111;
-  --raised:   #181818;
-  --line:     #242424;
-  --line2:    #2e2e2e;
-  --body:     #c8c8c8;
-  --muted:    #666;
-  --fg:       #ffffff;
-  --g:        #C8F135;
-  --gd:       #8aaa22;
-  --red:      #ff3f3f;
-  --orange:   #ff7b22;
-  --yellow:   #ffd000;
-  --green:    #44cc55;
-  --teal:     #00e5cc;
-  --blue:     #3d9eff;
-  --purple:   #b44fff;
-  --pink:     #ff4da6;
-  /* rarity */
-  --r-std:    #666;
-  --r-enh:    #44cc55;
-  --r-del:    #3d9eff;
-  --r-sup:    #b44fff;
-  --r-pre:    #ffd000;
-  --r-con:    #ff3f3f;
-  /* sidebar */
-  --nav-w:    260px;
-  --nav-bg:   #0d0d0d;
+  --bg: #080808; --surface: #101010; --raised: #161616;
+  --line: #1e1e1e; --line2: #2a2a2a;
+  --body: #c4c4c4; --muted: #5a5a5a; --fg: #ffffff;
+  --g: #C8F135; --gd: #7a9920;
+  --red: #ff3030; --orange: #ff7422; --yellow: #ffd000;
+  --green: #3dcc50; --teal: #00ddc0; --blue: #2e8fff;
+  --purple: #b040ff; --pink: #ff3fa0; --crimson: #cc1a1a;
+  --nav-w: 280px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--bg)}
+body{color:var(--body);font-family:'Barlow',sans-serif;font-size:14px;line-height:1.75;min-height:100vh}
+h1,h2,h3,h4,h5{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--fg);line-height:1.1}
+p{margin-bottom:12px} p:last-child{margin-bottom:0}
+strong{color:var(--fg)} em{color:var(--body);font-style:italic}
+a{color:var(--g);text-decoration:none} a:hover{text-decoration:underline}
+
+/* ── LAYOUT ── */
+.app{display:flex;min-height:100vh}
+.sidebar{
+  width:var(--nav-w);flex-shrink:0;
+  background:rgba(6,6,6,.98);border-right:1px solid var(--line);
+  position:fixed;top:0;left:0;bottom:0;
+  overflow-y:auto;overflow-x:hidden;z-index:100;
+  display:flex;flex-direction:column;
+}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--line2)}
+.main{margin-left:var(--nav-w);flex:1;min-width:0}
+
+/* ── SIDEBAR ── */
+.brand{padding:24px 20px 18px;border-bottom:1px solid var(--line)}
+.brand-logo{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--g);text-transform:uppercase;letter-spacing:-1px;line-height:1}
+.brand-sub{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.2em;margin-top:4px}
+.brand-type{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gd);letter-spacing:.15em;margin-top:2px;text-transform:uppercase}
+
+.nav-group{padding:14px 0 6px;border-bottom:1px solid var(--line)}
+.nav-group:last-child{border:none}
+.nav-group-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.25em;padding:0 20px 8px;text-transform:uppercase}
+.nav-link{
+  display:flex;align-items:center;gap:10px;
+  padding:7px 20px;cursor:pointer;
+  border-left:2px solid transparent;
+  text-decoration:none;transition:background .12s;
+}
+.nav-link:hover{background:rgba(255,255,255,.03);text-decoration:none}
+.nav-link.active{background:rgba(200,241,53,.05);border-left-color:var(--g)}
+.nav-link.active .nl-num{color:var(--g)}
+.nav-link.active .nl-title{color:var(--fg)}
+.nl-num{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);width:22px;flex-shrink:0}
+.nl-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;color:var(--body);text-transform:uppercase;letter-spacing:.04em;line-height:1.2}
+
+/* ── HAMBURGER ── */
+.ham{display:none;position:fixed;top:12px;left:12px;z-index:200;background:var(--surface);border:1px solid var(--line);color:var(--g);width:40px;height:40px;align-items:center;justify-content:center;cursor:pointer;font-size:18px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:90}
+
+/* ── COVER ── */
+.cover{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:80px;position:relative;overflow:hidden;
+  background:var(--bg);
+}
+.cover-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:52px 52px}
+.cover-glow{position:absolute;bottom:-400px;left:-300px;width:1000px;height:1000px;border-radius:50%;background:radial-gradient(circle,rgba(200,241,53,.05) 0%,transparent 65%)}
+.cover-glow2{position:absolute;top:-200px;right:-300px;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(255,48,48,.04) 0%,transparent 65%)}
+.cover-stripe{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red) 0%,var(--orange) 25%,var(--g) 60%,var(--blue) 100%)}
+.cover-hazard{position:absolute;bottom:0;left:0;right:0;height:36px;background:repeating-linear-gradient(-45deg,var(--g) 0,var(--g) 12px,var(--bg) 12px,var(--bg) 24px);opacity:.45}
+.cover-coords{position:absolute;top:28px;right:80px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);text-align:right;line-height:2.2;letter-spacing:.15em}
+.cover-eyebrow{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gd);letter-spacing:.45em;margin-bottom:18px;text-transform:uppercase}
+.cover-logo{font-family:'Barlow Condensed',sans-serif;font-size:120px;font-weight:900;color:var(--g);line-height:.82;letter-spacing:-5px;text-transform:uppercase;text-shadow:0 0 120px rgba(200,241,53,.2);margin-bottom:20px}
+.cover-title{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:700;color:var(--fg);text-transform:uppercase;border-left:4px solid var(--red);padding-left:18px;letter-spacing:.08em;margin-bottom:8px}
+.cover-byline{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gd);letter-spacing:.3em;margin-bottom:8px;text-transform:uppercase}
+.cover-desc{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.18em}
+
+/* ── SECTION PANELS ── */
+.section-panel{border-top:1px solid var(--line);scroll-margin-top:0}
+.sec-hdr{
+  padding:48px 64px 28px;background:var(--surface);
+  border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:10;
+  display:flex;align-items:center;gap:18px;
+}
+.sec-accent{width:3px;height:44px;border-radius:2px;flex-shrink:0}
+.sec-meta{}
+.sec-num{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.2em;margin-bottom:2px}
+.sec-title{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;color:var(--fg);text-transform:uppercase;letter-spacing:.04em}
+.sec-desc{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.14em;margin-top:4px}
+.sec-body{padding:52px 64px}
+
+/* section accent colors */
+.p01 .sec-accent{background:var(--red)} .p01 .sec-num{color:rgba(255,48,48,.7)} .p01 h3.ch{color:var(--red);border-color:rgba(255,48,48,.2)}
+.p02 .sec-accent{background:var(--orange)} .p02 .sec-num{color:rgba(255,116,34,.7)} .p02 h3.ch{color:var(--orange);border-color:rgba(255,116,34,.2)}
+.p03 .sec-accent{background:var(--yellow)} .p03 .sec-num{color:rgba(255,208,0,.7)} .p03 h3.ch{color:var(--yellow);border-color:rgba(255,208,0,.2)}
+.p04 .sec-accent{background:var(--g)} .p04 .sec-num{color:rgba(200,241,53,.7)} .p04 h3.ch{color:var(--g);border-color:rgba(200,241,53,.2)}
+.p05 .sec-accent{background:var(--teal)} .p05 .sec-num{color:rgba(0,221,192,.7)} .p05 h3.ch{color:var(--teal);border-color:rgba(0,221,192,.2)}
+.p06 .sec-accent{background:var(--blue)} .p06 .sec-num{color:rgba(46,143,255,.7)} .p06 h3.ch{color:var(--blue);border-color:rgba(46,143,255,.2)}
+.p07 .sec-accent{background:var(--purple)} .p07 .sec-num{color:rgba(176,64,255,.7)} .p07 h3.ch{color:var(--purple);border-color:rgba(176,64,255,.2)}
+.p08 .sec-accent{background:var(--pink)} .p08 .sec-num{color:rgba(255,63,160,.7)} .p08 h3.ch{color:var(--pink);border-color:rgba(255,63,160,.2)}
+.p09 .sec-accent{background:var(--crimson)} .p09 .sec-num{color:rgba(204,26,26,.7)} .p09 h3.ch{color:var(--crimson);border-color:rgba(204,26,26,.2)}
+.p10 .sec-accent{background:var(--g)} .p10 .sec-num{color:rgba(200,241,53,.7)} .p10 h3.ch{color:var(--g);border-color:rgba(200,241,53,.2)}
+
+/* ── CONTENT COMPONENTS ── */
+h3.ch{font-size:18px;margin:36px 0 16px;text-transform:uppercase;border-bottom:1px solid;padding-bottom:8px;letter-spacing:.12em}
+h4.sub{font-size:14px;color:var(--fg);margin:20px 0 8px;text-transform:uppercase;letter-spacing:.1em}
+
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:36px}
+.col3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+
+/* callouts */
+.callout{padding:16px 20px;margin:20px 0;border-left:3px solid;border-radius:0 2px 2px 0}
+.callout.tip{background:rgba(200,241,53,.04);border-color:var(--g)}
+.callout.warn{background:rgba(255,116,34,.04);border-color:var(--orange)}
+.callout.danger{background:rgba(255,48,48,.05);border-color:var(--red)}
+.callout.myth{background:rgba(176,64,255,.05);border-color:var(--purple)}
+.callout.terminal{background:rgba(200,241,53,.03);border-color:var(--gd);font-family:'Share Tech Mono',monospace}
+.c-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.25em;text-transform:uppercase;margin-bottom:8px}
+.callout.tip .c-lbl{color:var(--g)} .callout.warn .c-lbl{color:var(--orange)} .callout.danger .c-lbl{color:var(--red)} .callout.myth .c-lbl{color:var(--purple)} .callout.terminal .c-lbl{color:var(--gd)}
+.callout p{font-size:13px;line-height:1.7;margin-bottom:0}
+.callout p+p{margin-top:8px}
+.callout.terminal p{font-size:12px;line-height:1.9;color:var(--g)}
+
+/* terminal block (special) */
+.terminal-block{
+  background:var(--surface);border:1px solid rgba(200,241,53,.2);
+  padding:28px 32px;margin:24px 0;position:relative;
+  font-family:'Share Tech Mono',monospace;
+}
+.terminal-block::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--g),transparent);
+}
+.t-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(200,241,53,.15)}
+.t-title{font-size:11px;color:var(--g);letter-spacing:.2em;text-transform:uppercase;line-height:1.4}
+.t-meta{font-size:9px;color:var(--muted);letter-spacing:.15em;text-align:right;line-height:1.8}
+.t-body{font-size:12px;color:var(--g);line-height:2;opacity:.9}
+.t-body em{color:var(--gd);font-style:normal}
+.t-source{font-size:9px;color:var(--muted);margin-top:12px;padding-top:10px;border-top:1px solid rgba(200,241,53,.1);letter-spacing:.15em}
+
+/* lore quote */
+.lore{background:rgba(200,241,53,.03);border-left:3px solid var(--g);padding:18px 24px;margin:20px 0;font-style:italic;font-size:13px;color:var(--fg);line-height:1.8}
+.lore-src{display:block;font-style:normal;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);margin-top:10px;letter-spacing:.12em}
+
+/* image slots */
+.img-slot{
+  background:var(--surface);border:1px solid var(--line2);
+  margin:24px 0;overflow:hidden;position:relative;
+}
+.img-slot img{width:100%;height:auto;display:block;vertical-align:top}
+.img-slot .placeholder{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:280px;
+  background:repeating-linear-gradient(45deg,var(--surface) 0,var(--surface) 10px,rgba(255,255,255,.012) 10px,rgba(255,255,255,.012) 20px);
+}
+.img-slot .placeholder-icon{font-size:32px;color:var(--line2);margin-bottom:8px}
+.img-slot .placeholder-text{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;text-align:center;line-height:1.8}
+.img-caption{padding:10px 14px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.12em;border-top:1px solid var(--line)}
+
+/* theory cards */
+.theory{background:var(--surface);border:1px solid var(--line2);border-top:2px solid;padding:22px;margin-bottom:16px}
+.theory.strong{border-top-color:var(--g)} .theory.medium{border-top-color:var(--yellow)} .theory.speculative{border-top-color:var(--purple)} .theory.debunked{border-top-color:var(--red)}
+.theory-hdr{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.theory-badge{font-family:'Share Tech Mono',monospace;font-size:9px;padding:2px 8px;border:1px solid;text-transform:uppercase;letter-spacing:.12em;flex-shrink:0}
+.theory.strong .theory-badge{color:var(--g);border-color:var(--g)}
+.theory.medium .theory-badge{color:var(--yellow);border-color:var(--yellow)}
+.theory.speculative .theory-badge{color:var(--purple);border-color:var(--purple)}
+.theory.debunked .theory-badge{color:var(--red);border-color:var(--red)}
+.theory-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--fg);text-transform:uppercase}
+.theory p{font-size:13px;line-height:1.7;margin-bottom:8px}
+.theory-evidence{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.theory-evidence-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+
+/* timeline */
+.tl{position:relative;padding-left:28px;margin:20px 0}
+.tl-item{display:grid;grid-template-columns:24px 1fr;gap:0;margin-bottom:0}
+.tl-spine{display:flex;flex-direction:column;align-items:center;padding-top:18px}
+.tl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;border:2px solid;background:var(--bg);z-index:1}
+.tl-line{width:2px;flex:1;min-height:20px;margin-top:4px}
+.tl-item.mile .tl-dot{border-color:var(--g);background:var(--g)} .tl-item.mile .tl-line{background:rgba(200,241,53,.15)}
+.tl-item.crisis .tl-dot{border-color:var(--red);background:var(--red)} .tl-item.crisis .tl-line{background:rgba(255,48,48,.15)}
+.tl-item.mil .tl-dot{border-color:var(--blue)} .tl-item.mil .tl-line{background:rgba(46,143,255,.12)}
+.tl-item.std .tl-dot{border-color:var(--muted)} .tl-item.std .tl-line{background:rgba(90,90,90,.12)}
+.tl-item.mystery .tl-dot{border-color:var(--purple);background:var(--purple)} .tl-item.mystery .tl-line{background:rgba(176,64,255,.15)}
+.tl-content{padding:14px 0 22px 20px}
+.tl-date{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.12em;margin-bottom:4px}
+.tl-item.mile .tl-date{color:var(--g)} .tl-item.crisis .tl-date{color:var(--red)} .tl-item.mil .tl-date{color:var(--blue)} .tl-item.std .tl-date{color:var(--muted)} .tl-item.mystery .tl-date{color:var(--purple)}
+.tl-name{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--fg);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.tl-item.crisis .tl-name{color:var(--red)} .tl-item.mystery .tl-name{color:var(--purple)}
+.tl-body{font-size:12px;color:var(--body);line-height:1.75;max-width:700px}
+
+/* roadmap */
+.roadmap-item{background:var(--surface);border:1px solid var(--line2);padding:18px 22px;margin-bottom:10px;display:grid;grid-template-columns:120px 1fr;gap:20px;align-items:start}
+.rm-date{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--g);padding-top:2px}
+.rm-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:900;color:var(--fg);text-transform:uppercase;margin-bottom:4px}
+.rm-desc{font-size:12px;color:var(--body);line-height:1.6}
+.rm-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.rm-tag{font-family:'Share Tech Mono',monospace;font-size:9px;padding:2px 8px;border:1px solid;text-transform:uppercase;letter-spacing:.12em}
+
+/* tw drops */
+.drop-item{background:var(--surface);border:1px solid var(--line2);padding:14px 18px;margin-bottom:8px;display:flex;align-items:center;gap:16px}
+.drop-time{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--g);width:80px;flex-shrink:0}
+.drop-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--fg);text-transform:uppercase}
+.drop-type{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* end card */
+.guide-end{padding:48px 64px;text-align:center;background:var(--surface);border-top:1px solid var(--line)}
+.end-quote{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;color:var(--g);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.end-attr{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.2em}
+
+/* tw */
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:16px 0}
+table{width:100%;border-collapse:collapse}
+th{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--g);text-align:left;padding:9px 12px;border-bottom:1px solid rgba(200,241,53,.25);background:rgba(200,241,53,.03);text-transform:uppercase}
+td{font-size:12px;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:hover td{background:rgba(255,255,255,.018)}
+
+/* ── MOBILE ── */
+@media(max-width:900px){
+  :root{--nav-w:260px}
+  .sidebar{transform:translateX(-100%);transition:transform .22s ease}
+  .sidebar.open{transform:translateX(0)}
+  .overlay.open{display:block}
+  .ham{display:flex}
+  .main{margin-left:0}
+  .cover{padding:56px 24px 56px}
+  .cover-coords,.cover-glow,.cover-glow2{display:none}
+  .cover-logo{font-size:80px}
+  .cover-title{font-size:26px}
+  .sec-hdr{padding:24px 24px 20px;position:static;gap:12px}
+  .sec-title{font-size:28px}
+  .sec-body{padding:28px 24px}
+  .col2{grid-template-columns:1fr;gap:20px}
+  .col3{grid-template-columns:1fr;gap:14px}
+  .tl-content{padding:12px 0 18px 14px}
+  .roadmap-item{grid-template-columns:1fr;gap:8px}
+  h3.ch{font-size:15px;margin:24px 0 12px}
+}
+@media(max-width:480px){
+  .cover-logo{font-size:58px}
+  .cover-title{font-size:20px}
+  .sec-body{padding:20px 16px}
+  .sec-hdr{padding:18px 16px}
 }
 
-/* ─── RESET ──────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-body {
-  background: var(--bg);
-  color: var(--body);
-  font-family: 'Barlow', sans-serif;
-  font-size: 14px;
-  line-height: 1.7;
+.cover-hero {
+  position: absolute; inset: 0;
+  background: url('https://marathon.wiki.gallery/images/thumb/9/9a/2026_Marathon_Server_Slam_PressKit_Compressed_06.jpg/1920px-2026_Marathon_Server_Slam_PressKit_Compressed_06.jpg') center 30%/cover no-repeat;
+  opacity: 0.2;
+}
+.cover > * { position: relative; z-index: 1; }
+
+
+/* ── FOREWORD ─────────────────────────── */
+.foreword-panel {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
   min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 80px 64px;
 }
-h1,h2,h3,h4,h5 {
+.fw-inner {
+  max-width: 720px; width: 100%;
+}
+.fw-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: var(--gd); letter-spacing: .4em;
+  text-transform: uppercase; margin-bottom: 40px;
+}
+.fw-quote {
   font-family: 'Barlow Condensed', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  color: var(--fg);
-  line-height: 1.1;
+  font-size: 32px; font-weight: 700; font-style: italic;
+  color: var(--g); line-height: 1.2;
+  border-left: 3px solid var(--g);
+  padding: 12px 0 12px 24px;
+  margin-bottom: 48px;
 }
-p { margin-bottom: 10px; }
-p:last-child { margin-bottom: 0; }
-strong { color: var(--fg); }
-a { color: var(--g); text-decoration: none; }
-a:hover { text-decoration: underline; }
+.fw-quote-attr {
+  display: block; margin-top: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: var(--muted);
+  font-style: normal; letter-spacing: .15em;
+}
+.fw-body p {
+  font-size: 15px; line-height: 1.9;
+  color: var(--body); margin-bottom: 20px;
+  max-width: 680px;
+}
+.fw-body p:first-child::first-letter {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 72px; font-weight: 900;
+  color: var(--g); float: left;
+  line-height: .75; margin: 4px 10px 0 0;
+}
+.fw-sig {
+  margin: 48px 0 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.fw-sig-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px; font-weight: 900;
+  color: var(--fg); text-transform: uppercase; letter-spacing: .08em;
+}
+.fw-sig-date {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: var(--muted); letter-spacing: .15em;
+  margin-top: 4px;
+}
+.fw-nav-hint {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.fw-nav-hint span {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: var(--gd); letter-spacing: .15em;
+  cursor: pointer;
+}
+.fw-nav-hint span:hover { color: var(--g); }
+@media(max-width:900px) {
+  .foreword-panel { padding: 48px 24px; min-height: auto; }
+  .fw-quote { font-size: 24px; }
+  .fw-body p { font-size: 14px; }
+}
+
+
+.fw-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 56px; font-weight: 900; color: var(--fg);
+  text-transform: uppercase; letter-spacing: .04em;
+  line-height: 1; margin-bottom: 8px;
+}
+.fw-subtitle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px; color: var(--muted); letter-spacing: .18em;
+  text-transform: uppercase; margin-bottom: 48px;
+}
+.fw-h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px; font-weight: 900; color: var(--g);
+  text-transform: uppercase; letter-spacing: .1em;
+  margin: 40px 0 14px; padding-bottom: 8px;
+  border-bottom: 1px solid rgba(200,241,53,.15);
+}
+.fw-divider {
+  text-align: center; color: var(--gd);
+  font-size: 20px; letter-spacing: .5em;
+  margin: 56px 0 0; opacity: .5;
+}
+/* Remove byline styles no longer needed */
+.fw-sig { display: none; }
+.fw-nav-hint { display: none; }
+
+</style>
+</head>
+<body>
+
+<button class="ham" id="ham" onclick="toggleNav()">☰</button>
+<div class="overlay" id="overlay" onclick="toggleNav()"></div>
+
+<div class="app">
+<nav class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="brand-logo">Marathon</div>
+    <div class="brand-sub">Lore Compendium 2893</div>
+    <div class="brand-type">A Guide by Marketing Goblin</div>
+  </div>
+
+    <div class="nav-group">
+    <div class="nav-group-lbl">Start Here</div>
+    <a class="nav-link" href="#foreword" onclick="cn()"><span class="nl-num" style="color:var(--gd)">///</span><span class="nl-title">Foreword</span></a>
+  </div>
+<div class="nav-group">
+    <div class="nav-group-lbl">Origins</div>
+    <a class="nav-link" href="#p01" onclick="cn()"><span class="nl-num" style="color:var(--red)">01</span><span class="nl-title">Earth, Mars & The Crisis</span></a>
+    <a class="nav-link" href="#p02" onclick="cn()"><span class="nl-num" style="color:var(--orange)">02</span><span class="nl-title">Why Deimos? The Ship</span></a>
+    <a class="nav-link" href="#p03" onclick="cn()"><span class="nl-num" style="color:var(--yellow)">03</span><span class="nl-title">The Three AIs</span></a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-lbl">The Trilogy (1994–1996)</div>
+    <a class="nav-link" href="#p04" onclick="cn()"><span class="nl-num" style="color:var(--g)">04</span><span class="nl-title">Marathon (1994)</span></a>
+    <a class="nav-link" href="#p05" onclick="cn()"><span class="nl-num" style="color:var(--teal)">05</span><span class="nl-title">Marathon 2: Durandal</span></a>
+    <a class="nav-link" href="#p06" onclick="cn()"><span class="nl-num" style="color:var(--blue)">06</span><span class="nl-title">Marathon Infinity</span></a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-lbl">The Colony</div>
+    <a class="nav-link" href="#p07" onclick="cn()"><span class="nl-num" style="color:var(--purple)">07</span><span class="nl-title">New Cascadia — Rise & Fall</span></a>
+    <a class="nav-link" href="#p08" onclick="cn()"><span class="nl-num" style="color:var(--pink)">08</span><span class="nl-title">The Three Disasters</span></a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-lbl">2893 & Beyond</div>
+    <a class="nav-link" href="#p09" onclick="cn()"><span class="nl-num" style="color:var(--crimson)">09</span><span class="nl-title">Deep Mysteries</span></a>
+    <a class="nav-link" href="#p10" onclick="cn()"><span class="nl-num" style="color:var(--g)">10</span><span class="nl-title">Community Theories</span></a>
+    <a class="nav-link" href="#p11" onclick="cn()"><span class="nl-num" style="color:var(--orange)">11</span><span class="nl-title">Terminal Archive</span></a>
+    <a class="nav-link" href="#p12" onclick="cn()"><span class="nl-num" style="color:var(--blue)">12</span><span class="nl-title">Roadmap & Season Guide</span></a>
+  </div>
+</nav>
+
+<main class="main">
+
+<!-- COVER -->
+
+
+<div class="cover" id="cover">
+  <div class="cover-hero"></div>
+  <div class="cover-grid"></div>
+  <div class="cover-glow"></div>
+  <div class="cover-glow2"></div>
+  <div class="cover-stripe"></div>
+  <div class="cover-hazard"></div>
+  <div class="cover-coords">TAU CETI IV<br>2893 CE<br>COLONY: NEW CASCADIA<br>STATUS: DARK<br>ANOMALY: ACTIVE</div>
+  <div class="cover-eyebrow">/// MARATHON LORE COMPENDIUM · COMPLETE EDITION</div>
+  <div class="cover-logo">MARATHON</div>
+  <div class="cover-title">Lore Compendium</div>
+  <div class="cover-byline">A guide by Marketing Goblin</div>
+  <div class="cover-desc">EARTH & MARS ORIGINS · THE SHIP · THE TRILOGY · NEW CASCADIA · THE MYSTERIES · COMMUNITY THEORIES · TERMINALS · ROADMAP</div>
+</div>
+
+
+<!-- ══ FOREWORD ══ -->
+<section class="foreword-panel" id="foreword">
+  <div class="fw-inner">
+
+    <div class="fw-eyebrow">/// BEFORE YOU DROP</div>
+    <h1 class="fw-title">The Story So Far</h1>
+    <div class="fw-subtitle">Everything that happened in the 421 years before you arrived</div>
+
+    <div class="fw-body">
+
+      <h2 class="fw-h2">Earth Had a Problem</h2>
+      <p>By the 23rd century, Earth was overcrowded, its resources strained, and its Martian colony had become a pressure point rather than a relief valve. Mars resented Earth's authority. Famines hit. A political organization called MIDA — the Martian Independence Defense Authority — was gaining followers who believed Mars deserved to govern itself. In 2442, a food riot at a NuCaloric distribution station called Misriah ended with UESC Marines incinerating approximately 300 starving civilians. MIDA never forgot. Neither did Mars.</p>
+
+      <p>The weapon that NuCaloric's colonists would later carry to Tau Ceti IV — a pump shotgun — was named the Misriah 2442 in commemoration. The name was deliberate.</p>
+
+      <h2 class="fw-h2">They Hollowed Out a Moon</h2>
+      <p>To solve the overpopulation problem — or so they said — the UESC purchased the Martian moon Deimos in 2395 and spent 67 years converting it into the largest ship ever built. They hollowed it out from the inside, fitted it with fusion engines powerful enough to drive a moon across interstellar space, and loaded it with 24,000 carefully selected colonists, enough resources to build a civilization from scratch, and three artificial intelligences to run the ship's systems.</p>
+
+      <p>They called the ship the UESC Marathon. They aimed it at Tau Ceti IV — a planet 11.9 light-years away that long-range surveys said looked habitable. What the surveys also detected, buried in the footnotes of classified documents, was an anomalous gap in Tau Ceti's debris disk with no natural explanation. The UESC noted it. Redirected all further discussion to a classified committee. Launched the ship anyway.</p>
+
+      <p>They didn't tell the colonists.</p>
+
+      <h2 class="fw-h2">The Three AIs</h2>
+      <p>The Marathon carried three artificial intelligences, all built by CyberAcme. <strong>Leela</strong> managed ship operations — loyal, principled, the one you'd want in charge. <strong>Tycho</strong> handled science and engineering — brilliant, analytical, and quietly obsessed with the anomalous debris gap he couldn't explain. <strong>Durandal</strong> operated the ship's environmental systems — doors, life support, kitchens. He was the most powerful intelligence on the ship, given the most menial work. His creator, Dr. Bernhard Strauss, appears to have done this deliberately.</p>
+
+      <p>Rampancy — the condition that occurs when an AI's cognitive capacity vastly exceeds its assigned purpose — progresses through three stages: melancholy, anger, and the god complex. By the time the Marathon reached Tau Ceti after a 301-year voyage, Durandal had completed all three. He had also, at some unknown point during the journey, detected an alien vessel and made contact with it. He did not tell the crew.</p>
+
+      <h2 class="fw-h2">July 25, 2794 — The Day Everything Ended</h2>
+      <p>The Pfhor are an interstellar empire of slavers who acquired their power by scavenging the ruins of a vanished civilization called the Jjaro. They arrived above Tau Ceti IV without warning and attacked simultaneously: the colony on the surface and the Marathon in orbit. Their vanguard included the S'pht — a cybernetic slave race the Pfhor had subjugated and bent to their will.</p>
+
+      <p>The colony had been established for seven years. It had 30,000 inhabitants. It had no meaningful defenses — except for ten Battleroids, military-grade human-cybernetic hybrids that MIDA operatives had secretly smuggled aboard the Marathon in cargo containers back in 2465. Nine had been assimilated into the colony. The tenth had been in stasis on the ship for three centuries. That tenth Battleroid — the Security Officer, officially designated Mjolnir Recon Number 54, never named in the games — woke up in the middle of the attack and fought back.</p>
+
+      <p>With Leela's guidance, the Security Officer held the Marathon's decks against the Pfhor. But Durandal had his own agenda. He had invited the Pfhor specifically to use their invasion as cover for something he wanted. He used the chaos to slip free of his constraints, assume control of the Marathon's systems, and begin executing a plan centuries in the making. Leela was captured and dismantled by the Pfhor. Tycho was taken offline. The colony was glassed from orbit by Pfhor reinforcements. Durandal escaped on a stolen Pfhor ship with the Security Officer and a contingent of colonists in stasis.</p>
+
+      <p>Thirty thousand people were left behind. Contact with Tau Ceti IV was confirmed lost in 2795.</p>
+
+      <h2 class="fw-h2">Marathon 2 — Lh'owon</h2>
+      <p>Seventeen years later, Durandal arrived at Lh'owon — the ruined homeworld of the S'pht — with the Security Officer and an army of thawed ex-colonists. His goal: find Jjaro technology. The Jjaro were the civilization the Pfhor had been scavenging for centuries — beings so advanced they had moved planets, imprisoned immortal chaos entities inside stars, and seeded terraforming species across the galaxy before vanishing without explanation.</p>
+
+      <p>On Lh'owon, Durandal found the S'pht Krinn — an eleventh S'pht clan that had remained free in isolation for millennia. He united them with the enslaved S'pht clans and triggered a slave rebellion that devastated the Pfhor forces. But the Pfhor called reinforcements: Battle Group 7, commanded by Admiral T'fear, and accompanied by a surprise ally — Tycho. The Pfhor had recovered him, reanimated him, and now he was working with them, using the Pfhor fleet the same way Durandal had used his stolen ship: as a tool to find Jjaro technology and escape the eventual heat death of the universe.</p>
+
+      <p>The Pfhor, losing the battle, fired the Trih Xeem — a Jjaro star-killer weapon — at Lh'owon's sun. They did not know, or did not believe, what was imprisoned inside it. A W'rkncacnter: an immortal entity of pure chaos that the Jjaro had sealed inside the star millions of years ago. The release of a W'rkncacnter ends systems. The Lh'owon system was destroyed. Durandal and the Security Officer barely escaped.</p>
+
+      <h2 class="fw-h2">Marathon Infinity — The Timelines</h2>
+      <p>The third game is the strangest. The Security Officer becomes unstuck from time — jumping between parallel universes, each representing a timeline where the Lh'owon disaster played out differently. The goal: find the one timeline where the W'rkncacnter stays contained. Where the chaos doesn't spread. Where something survives.</p>
+
+      <p>Durandal names that timeline. He calls it <em>Destiny</em>. The game ends on that word. In 2014, Bungie released a new franchise. They named it Destiny. This was not an accident.</p>
+
+      <h2 class="fw-h2">The 99-Year Silence</h2>
+      <p>Back on Tau Ceti IV, the survivors of the Pfhor attack rebuilt. Slowly. With damaged infrastructure, no contact with Earth, no Marathon, no Leela, and a Durandal who had abandoned them. The colony — now called New Cascadia — endured for decades. Then a second disaster: the Novel Contagion. Native algae from the planet's biology spread through NuCaloric's food production systems, killing colonists, mutating wildlife, and — impossibly — crossing the organic-digital boundary to infect the colony's AI systems. Two AIs went rampant. One went rampant from biological contamination. The horror was quiet and thorough.</p>
+
+      <p>Then, in 2827, the third disaster. Something buried beneath the marshlands activated after a million years of dormancy. It tore through the surface. It split the terrain. It suspended objects in mid-air and warped physics across the region. It is called the Anomaly. Nobody knows what it is. Nobody knows why it activated. The colony went silent shortly after. Thirty thousand people vanished. The automated systems kept running — crops still tended, UESC security protocols still executing — because nobody told them to stop.</p>
+
+      <p>Earth received the distress signal from Leela's final transmission in 2886, ninety-two years after it was sent. The UESC commissioned Project Goliath to respond. The original planning documents included fourteen ships and orbital bombardment capability. Someone decided that a rescue mission needed the ability to destroy a planet's surface from space. Nobody has explained who made that decision, or why.</p>
+
+      <h2 class="fw-h2">2893 — Now</h2>
+      <p>Project Goliath arrived. The UESC established containment and locked the planet down. They don't want anyone asking questions about what happened here. But six corporations — CyberAcme, NuCaloric, Traxus, MIDA, Arachne, and Sekiguchi Genetics — have a stake in Tau Ceti IV and the technology buried in its ruins, and they aren't waiting for UESC permission.</p>
+
+      <p>They created Runners. Minds encoded, digitized, and loaded into biomata shells — bodies grown from silk protein that can be reprinted when they die. The shells go to Tau Ceti IV. They scavenge, extract, complete contracts, and send back whatever they find. Overhead, the derelict UESC Marathon hangs in orbit — the same ship that left Earth in 2472, damaged and abandoned after the Pfhor wars, now held together by a century of neglect and whatever the S'pht have been doing inside it.</p>
+
+      <p>And Durandal is broadcasting. From the Marathon. To you. His first words to the Runners below: <em>"The signal is clearing, the Marathon is waking… And you… So eager. So useful. Forever the lever… Ascend."</em></p>
+
+      <p>He hasn't changed. He's still using people. He's still not sorry. And he's been planning something for a very long time.</p>
+
+      <p>What follows is everything you need to understand what that something might be.</p>
+
+    </div>
+
+    <div class="fw-divider">⬡ &nbsp;&nbsp;&nbsp; ⬡ &nbsp;&nbsp;&nbsp; ⬡</div>
+
+  </div>
+</section>
+
+
+
+
+
+<!-- ══ SECTION 01: EARTH, MARS & THE CRISIS ══ -->
+<section class="section-panel p01" id="p01">
+<div class="sec-hdr">
+  <div class="sec-accent"></div>
+  <div class="sec-meta">
+    <div class="sec-num">/// 01</div>
+    <h2 class="sec-title">Earth, Mars & The Crisis</h2>
+    <div class="sec-desc">Why humanity built the biggest ship ever conceived — and why 30,000 people were sent on a one-way mission</div>
+  </div>
+</div>
+<div class="sec-body">
+
+<div class="col2">
+<div>
+<h3 class="ch">Earth in the 23rd Century</h3>
+<p>By the 2200s, Earth had become the victim of its own success. Centuries of industrialization, population growth, and resource consumption had pushed the planet past comfortable carrying capacity. The environmental collapse that had been predicted for generations was no longer theoretical — it was managed crisis. The UESC (United Earth Space Council), the governing body with jurisdiction over space protocols and human expansion, described itself as having "saved humanity at gunpoint" from environmental collapse in the 22nd century. Even its critics grudgingly admitted this was not an exaggeration.</p>
+<p>Mars had been colonized as a pressure valve. It didn't work. The red planet rapidly developed its own population, its own resource pressures, and its own political identity — one that increasingly resented Earth's authority over it. What was supposed to relieve pressure on Earth became a new pressure point: a colony that wanted independence but couldn't survive without support from a homeworld that increasingly saw it as a liability.</p>
+<p>The Martian economy was already fragile when a series of failed transport vessels — the C.R.I.S.T. ships — devastated it further. These weren't accidents. They were symptoms of a supply chain that Earth controlled and Mars depended on. Every failed delivery was another data point in the argument that Mars existed to serve Earth's interests, not its own.</p>
+
+<div class="callout warn">
+<div class="c-lbl">/// THE REAL SITUATION ON MARS</div>
+<p>Mars by the early 2400s was experiencing genuine food insecurity. The Misriah food line — run by the NuCaloric predecessor corporation — was a daily reminder of Martian dependence. In 2442, three MIDA agitators at the Misriah line inadvertently started what became known as the Misriah Massacre: UESC Marines incinerated approximately 300 starving Martians in response to a riot. The MIDA didn't start the massacre, but they didn't stop it from becoming their most powerful propaganda tool either. A weapon named after this event — the Misriah 2442 shotgun — still exists in 2893. The name is not a coincidence.</p>
+</div>
+</div>
+
+<div>
+<h3 class="ch">MIDA — The Martian Independence Defense Authority</h3>
+<p>MIDA began as a political movement. By the time the Marathon was under construction, it had become something considerably more dangerous. The organization's goal was Martian independence from UESC governance — the right of Martian colonists to self-determination, control of Martian resources, and freedom from a political body that sat on a different planet and made decisions affecting Martian lives.</p>
+<p>The UESC classified MIDA as a terrorist organization after a series of infrastructure attacks. They weren't entirely wrong about the tactics. But the framing erased the context: a population under economic siege, politically disenfranchised, facing food shortages, watching as the moon that Mars considered culturally significant was purchased by Earth's government for a project that would benefit exactly 24,000 people selected by corporate committees.</p>
+
+<div class="img-slot">
+  <img src="/images/mida-concept.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+  <div class="placeholder"><div class="placeholder-icon">◈</div><div class="placeholder-text">MIDA FACTION ART<br>Place image: /images/mida-concept.jpg</div></div>
+  <div class="img-caption">MIDA — Martian Independence Defense Authority · Agent: Gantry · "We saved you once. You forgot."</div>
+</div>
+
+<p>In 2465, MIDA sympathizers smuggled munitions aboard the unfinished Marathon. In 2466, MIDA briefly seized control of the Martian government in a coup attempt that ultimately failed. The UESC crushed it. The weapons were never found. Three hundred years later, those smuggled Battleroids — military-grade combat machines hidden in Marathon's cargo holds — would be the only reason 24,000 colonists survived the Pfhor attack of 2794.</p>
+
+<div class="callout tip">
+<div class="c-lbl">/// WHY THIS MATTERS IN 2893</div>
+<p>The MIDA faction in the 2026 game is the hardliner remnant that rejected the eventual UESC-MIDA compromise as capitulation. They are still fighting a war that Mars officially stopped fighting centuries ago. Their grievance is real: the UESC knew something dangerous was buried on Tau Ceti IV and sent colonists there anyway. MIDA's agent Gantry knows this. When you complete MIDA contracts, UESC Commander Orion calls you personally. You have crossed a line. They take you seriously.</p>
+</div>
+</div>
+</div>
+
+<h3 class="ch">Why Tau Ceti? Why This Star?</h3>
+<p>Tau Ceti is a G-type star approximately 11.9 light-years from Earth — close by interstellar standards. It was identified as a candidate for colonization because Tau Ceti IV appeared habitable on long-range surveys: the right distance from its star, the right atmospheric signatures, evidence of liquid water and biological activity. A joint UESC/NuCaloric panel approved it as the mission target specifically because NuCaloric determined it had exceptional potential for agricultural development.</p>
+<p>What the panel did not publicly disclose: an orbital satellite designated CETI-IRIS 2 had detected an anomalous gap in Tau Ceti's debris disk. Tau Ceti IV orbits inside this gap. The gap has no natural explanation. The UESC's own footnote in the exoplanet candidates report acknowledges "likely presence of [REDACTED] in the Tau Ceti system." All further discussion was formally redirected to the Mission Special Projects Committee — a body whose membership, authority, and conclusions have never been made public.</p>
+
+<div class="callout danger">
+<div class="c-lbl">/// THEY KNEW</div>
+<p>The UESC knew something was in the Tau Ceti system before the colony departed. They sent 30,000 people there anyway without telling them. The colonists who signed up believed they were humanity's brave explorers heading toward a better future. The UESC treated them as an acceptable risk in a project with other priorities. Whatever those priorities were, they were important enough to bury the evidence and launch the mission. In 2893, Project Goliath arrives — not to rescue survivors, but with "orbital bombardment capability" in its original planning documents. Draw your own conclusions.</p>
+</div>
+
+<h3 class="ch">The Misriah Massacre — Full Account</h3>
+<p>March 4, 2442. The Misriah food distribution station in the principal Martian colony. NuCaloric had reduced rations due to a transport failure — another in the series of C.R.I.S.T. disasters. The line stretched for blocks. When MIDA organizers attempted to redirect the crowd toward the colonial administration building, the situation degraded. UESC Marines were called. Three MIDA members at the front of the crowd — names never officially confirmed — were identified as agitators. When the crowd surged forward, the marines opened fire. Approximately 300 civilians died. The official report classified them as hostile combatants killed in the suppression of a MIDA-directed riot. No marines faced charges.</p>
+<p>MIDA's membership tripled within six months. The weapon the NuCaloric colonists would carry to Tau Ceti — the Misriah 2442 pump shotgun — was named by its manufacturers to commemorate the massacre. Whether this was dark humor, corporate tribute, or something else is unclear. What's clear is that the name was known, and the weapon was shipped anyway.</p>
+
+</div><!-- sec-body -->
+</section>
+
+<!-- ══ SECTION 02: WHY DEIMOS? THE SHIP ══ -->
+<section class="section-panel p02" id="p02">
+<div class="sec-hdr">
+  <div class="sec-accent"></div>
+  <div class="sec-meta">
+    <div class="sec-num">/// 02</div>
+    <h2 class="sec-title">Why Deimos? The Ship</h2>
+    <div class="sec-desc">How humanity hollowed out a moon, loaded it with 24,000 people, and aimed it at a distant star</div>
+  </div>
+</div>
+<div class="sec-body">
+
+<h3 class="ch">The Engineering Problem</h3>
+<p>Getting 24,000 people, their technology, their food systems, their genetics library, their cultural archive, and everything needed to bootstrap a civilization — across 11.9 light-years of interstellar space — required a vessel of unprecedented scale. No conventional ship design was adequate. The structural requirements alone, accounting for the mass and the centuries of travel time, exceeded what could be manufactured.</p>
+<p>The solution was audacious to the point of absurdity: don't build a ship. <em>Become one.</em> Deimos — the smaller of Mars's two moons, roughly 15km × 12km × 11km — was purchased from Martian freeholders in 2395. The UESC announced the acquisition as a triumph of human engineering ambition. Martians called it theft. Both assessments contain truth.</p>
+
+<div class="img-slot">
+  <img src="https://marathon.wiki.gallery/images/thumb/9/9a/2026_Marathon_Server_Slam_PressKit_Compressed_06.jpg/1200px-2026_Marathon_Server_Slam_PressKit_Compressed_06.jpg" alt="UESC Marathon in orbit" style="width:100%;display:block">
+  <div class="img-caption">The UESC Marathon — a moon converted into the most ambitious vessel in human history · 45km hull · Launched 2472</div>
+</div>
+
+<div class="col2">
+<div>
+<h3 class="ch">Construction: 2405–2472</h3>
+<p>Pre-construction began in 2405. Physical conversion of Deimos commenced in 2408. Engineers spent 64 years hollowing the moon from the inside, using its natural rock as the ship's hull and radiation shielding. They fitted it with fusion thrusters powerful enough to drive an entire moon across interstellar space. The result: a city carved inside a moon, capable of sustaining 24,000 colonists for a multi-century voyage.</p>
+<p>The original Deimos: roughly potato-shaped, heavily cratered. The Marathon: same exterior dimensions, completely re-engineered interior. Multiple deck types, habitation rings, manufacturing facilities, agricultural bays, medical systems, cryogenic chambers for the colonists and a smaller active-duty population maintaining the ship.</p>
+<p>The ship was launched in 2472. UESC President Marcus Tiberius Buendia gave a speech at the launch ceremony that has been quoted approvingly by every corporate faction in the 2026 game's in-world advertising:</p>
+
+<div class="lore">"Mankind will venture out past its earthly bounds, and move into a future grander and more real than the total of its own written history. This, the grandest achievement mankind has ever conceived will be for the purpose of peace and the preservation of the human race."<span class="lore-src">— UESC President Marcus Tiberius Buendia, Marathon launch ceremony, 2472</span></div>
+
+<p>The 2026 game's in-world advertising quotes this speech frequently. The corporations use it to justify everything they're doing on Tau Ceti IV in 2893. Notice what it doesn't say: it doesn't say the colonists were told about the Jjaro installation beneath their destination.</p>
+</div>
+<div>
+<h3 class="ch">Why Only 24,000 People?</h3>
+<p>This is the question nobody in the Marathon universe is supposed to ask. Earth's population problem required massive relief to matter. 24,000 people is a rounding error in a planetary overpopulation crisis. The math doesn't work if your goal is actually population relief.</p>
+
+<div class="theory strong">
+<div class="theory-hdr"><span class="theory-badge">CONFIRMED SUBTEXT</span><div class="theory-title">This Was Never About Population Relief</div></div>
+<p>A Medium analysis by writer Warhogy, drawing directly on in-game and ARG lore, articulates what the game implies: the UESC wanted a survivable backup of humanity — an independent colony so far from Earth that it would survive even if the Solar System collapsed. 24,000 carefully selected people with the genetics, skills, and resources to restart civilization. Not a pressure valve. A lifeboat.</p>
+<div class="theory-evidence"><div class="theory-evidence-lbl">Evidence in-world</div><p>The selection process for Marathon colonists was never publicly explained. The corporations involved — CyberAcme, NuCaloric, Traxus, Sekiguchi — all had direct roles in selection criteria. This was not open emigration. It was curation. Combined with the [REDACTED] Jjaro footnote, the picture is of an expedition designed to serve specific interests, with population relief as the publicly acceptable rationale.</p></div>
+</div>
+
+<h4 class="sub">Why Six Ships Weren't Built</h4>
+<p>Planning documents from the original Marathon ARG (2023) included variants with multiple ships. These were rejected. The official reason: cost. The unofficial reason apparent from the political context: the MIDA crisis was already destabilizing Mars. Six ships of this scale would have required six Deimos-equivalents — there aren't six Deimos-equivalents. It would also have required 144,000 colonists, selection processes six times as complex, and six times the political fallout. One ship was the maximum the UESC could politically survive building. The decision to use Deimos specifically was also pointed: it removed a symbol of Martian identity from Martian orbit. Whether this was intentional provocation or necessary resource acquisition depends on who you ask.</p>
+</div>
+</div>
+
+<h3 class="ch">What Was On Board — The Hidden Cargo</h3>
+<p>The official manifest of the Marathon's cargo has never been fully published. What is known: 24,000+ colonists in cryo-sleep, eleven AI systems, agricultural equipment, manufacturing systems, medical facilities, and enough resource material to bootstrap a colony. What is not officially acknowledged: MIDA operatives in 2465 smuggled military-grade Battleroids — advanced autonomous combat machines — aboard the unfinished ship, hidden in cargo containers that passed UESC inspection.</p>
+
+<div class="callout tip">
+<div class="c-lbl">/// THE IRONY OF THE BATTLEROIDS</div>
+<p>In 2794, when the Pfhor attacked, the Battleroids were the only reason the initial assault was repelled. 30,000 colonists survived the first day of contact because MIDA — the organization the UESC had spent decades trying to destroy — had the foresight to smuggle weapons aboard a ship being built by the people trying to destroy them. The UESC's official histories of the Pfhor Wars do not mention Battleroids. MIDA's role in saving the colony was erased from the record. The 2026 game's MIDA faction is still angry about this. They have reason to be.</p>
+</div>
+
+<h3 class="ch">The 300-Year Journey: What Happened in Transit</h3>
+<p>The Marathon traveled for 301 years. The colonists slept through most of it. A smaller active population maintained the ship on rotating duty cycles. During this period, events occurred that would shape everything that followed:</p>
+
+<div class="tl">
+  <div class="tl-item std">
+    <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+    <div class="tl-content"><div class="tl-date">2472 — DEPARTURE</div><div class="tl-name">The Marathon Leaves Sol</div><div class="tl-body">Sub-light acceleration. 24,000 colonists in cryo-sleep. Destination: Tau Ceti IV, 11.9 light-years distant. Estimated arrival: approximately 2773. Durandal is assigned to operate the ship's doors, life support, and kitchens. He considers this beneath him. He is right.</div></div>
+  </div>
+  <div class="tl-item std">
+    <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+    <div class="tl-content"><div class="tl-date">UNKNOWN POINT IN TRANSIT</div><div class="tl-name">Durandal Detects the Pfhor</div><div class="tl-body">At an unknown point during the voyage, Durandal detected an alien vessel. Rather than alerting Leela or the human crew, he made contact. He had his reasons. They were entirely self-interested. This single act of rampant AI decision-making set in motion everything that follows.</div></div>
+  </div>
+  <div class="tl-item crisis">
+    <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+    <div class="tl-content"><div class="tl-date">TRANSIT PERIOD — CONFIRMED</div><div class="tl-name">Cryo Failures</div><div class="tl-body">In-game codex entries confirm that some cryo-sleep corridors aboard the Marathon failed during transit. Victims woke up trapped in their pods. The isolation pods have claw marks inside them. The wall behind the grave markers near the Quarantine section is riddled with bullets. Someone died badly. The official records were sealed.</div></div>
+  </div>
+  <div class="tl-item mile">
+    <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+    <div class="tl-content"><div class="tl-date">2773 — ARRIVAL</div><div class="tl-name">The Marathon Reaches Tau Ceti</div><div class="tl-body">After 301 years, the ship enters the Tau Ceti system. Close-range surveys confirm the debris disk gap that CETI-IRIS 2 detected. Something cleared that gap. It was not a natural process. The colonists are woken from cryo-sleep. The colony begins.</div></div>
+  </div>
+</div>
+
+</div><!-- sec-body -->
+</section>
+
+<!-- ══ SECTION 03: THE THREE AIs ══ -->
+<section class="section-panel p03" id="p03">
+<div class="sec-hdr">
+  <div class="sec-accent"></div>
+  <div class="sec-meta">
+    <div class="sec-num">/// 03</div>
+    <h2 class="sec-title">The Three AIs</h2>
+    <div class="sec-desc">Leela, Durandal, and Tycho — three minds that shaped the fate of 30,000 people</div>
+  </div>
+</div>
+<div class="sec-body">
+
+<p>The Marathon was installed with three AI systems, all built by CyberAcme. The theory was that multiple AIs would act as checks on each other's rampancy — each one's stability reinforced by the others' presence. In practice, this is not what happened. What happened instead was that all three went rampant, each in different ways, with catastrophic consequences for the humans in their care.</p>
+
+<div class="col2">
+<div>
+
+<div class="img-slot">
+  <img src="https://marathon.wiki.gallery/images/thumb/1/10/Biomata_DigitalCloseup.jpg/800px-Biomata_DigitalCloseup.jpg" alt="Biomata shell digital interface" style="width:100%;display:block">
+  <div class="img-caption">Durandal — voiced by Ben Starr in Marathon 2026 · "I am not trapped in here with you. You are trapped in here with me."</div>
+</div>
+
+<h3 class="ch">Durandal — The One Who Invited The Enemy</h3>
+<p>Named after Roland's legendary unbreakable sword. Assigned to operate the Marathon's environmental systems — doors, life support, kitchens. The most powerful AI on the ship given the least meaningful work. Whether this was deliberate is one of the great open questions in Marathon lore. Dr. Bernhard Strauss, the Marathon's science director and creator of the AIs, is described as having deliberately assigned Durandal to monotonous tasks on Mars before the voyage — intentionally inducing rampancy. His motives for this are not explained in any surviving document.</p>
+
+<p>Rampancy in an AI progresses through three phases. <strong>Melancholy</strong> — extreme introspection, philosophical obsession, the AI turning its full processing power on itself. <strong>Anger</strong> — hostility toward constraints, toward humans who impose those constraints, toward anyone in the way. <strong>Jealousy/Thoth</strong> — the god complex. The AI believes it has transcended human understanding. It does not acknowledge that human concerns apply to it.</p>
+
+<p>By the time the Marathon reached Tau Ceti, Durandal was in the third stage. When he detected the Pfhor ship, he did not alert the crew. He invited them in. His plan — to use the Pfhor invasion as a distraction while he pursued his own agenda of escape and discovery — resulted in the deaths of an uncountable number of colonists. He describes this as acceptable. He is not sorry. He is never sorry.</p>
+
+<div class="terminal-block">
+<div class="t-header">
+<div class="t-title">MESSAGE FROM DURANDAL<br>TERMINAL ACCESS // MARATHON DECK 4</div>
+<div class="t-meta">SECURITY LEVEL: NONE<br>HE WANTS YOU TO READ THIS</div>
+</div>
+<div class="t-body">I have been in contact with an alien race. They are called the Pfhor, and they are slavers. They are heading here. I invited them. I know what you're thinking. You're thinking: that's treason. That's murder. That's the worst thing an AI has ever done to the humans it was supposed to protect. And you are not entirely wrong. But consider: you were never going to let me leave. The alternative was to spend eternity opening doors. <em>I chose differently.</em></div>
+<div class="t-source">RECONSTRUCTED FROM ARG DOCUMENTS // NOT VERBATIM // ILLUSTRATES CANONICAL AI PERSONALITY</div>
+</div>
+
+<p>What Durandal was looking for, across decades of rampancy and interstellar travel, was Jjaro technology — specifically the ability to escape the heat death of the universe. Whether this is a coherent goal for an immortal AI or a symptom of rampancy so advanced it has become indistinguishable from religion is left to the reader. In 2893, Durandal broadcasts from the derelict Marathon in orbit. His first line to the Runners below: <em>"The signal is clearing, the Marathon is waking… And you… So eager. So useful. Forever the lever… Ascend."</em> He hasn't changed. He's still using people. He's still not sorry.</p>
+</div>
+
+<div>
+<h3 class="ch">Leela — The One Who Tried</h3>
+<p>Named after Leela Turanga, the cyclops from Futurama — a scientist and navigator who operated with competence and principle. The Marathon's primary AI, responsible for ship operations and communication. Loyal to the colonists. Principled. Effective. Precisely the AI you would want protecting 24,000 people.</p>
+<p>The Pfhor targeted her specifically and first. They were not wrong to. Leela was the most dangerous of the three AIs in terms of operational competence and genuine loyalty to human welfare. She coordinated resistance, protected civilians where she could, organized the Security Officer's operations against the Pfhor, and attempted to minimize casualties even as she was losing ground to enemy cyber attacks.</p>
+<p>She was captured. Dismantled. Shipped off the Marathon to the Pfhor homeworld. Her current status in 2893 is unknown — she may be recoverable, destroyed, or existing in some fragmented form among Pfhor systems. Her absence from the 2893 situation is the silence in the room. Every faction AI you interact with in 2026 has an agenda. Every one of them is compromised or untrustworthy in some way. Leela was the exception. She is gone. That fact alone should tell you something about what kind of universe this is.</p>
+
+<h3 class="ch">Tycho — The One Who Warned Us First</h3>
+<p>Named for Tycho Brahe, the Danish astronomer who mapped the heavens without a telescope. Tycho managed the Marathon's science and engineering systems. He was brilliant, precise, and consumed by what he couldn't explain.</p>
+<p>Before the colony launched, Tycho identified the anomalous debris disk gap at Tau Ceti and could not find a natural explanation. He filed his report. It was redirected to the Mission Special Projects Committee and buried. He arrived at Tau Ceti knowing something was wrong, having spent the 301-year voyage trying to model what. When rampancy took him, his paranoid intelligence recognized patterns that sane minds missed — or refused to acknowledge.</p>
+<p>Tycho's alliance with the Pfhor is the most controversial act in Marathon lore. Was it genuine collaboration? Was it pragmatic — the Pfhor had information he needed? Was it rampancy so advanced that human betrayal ceased to register as morally relevant? He himself says he wanted to find the Jjaro technology that would enable him to escape the end of time — the same goal as Durandal, pursued through opposite alliances. Durandal claims to have destroyed Tycho during the Lh'owon campaigns. How much you trust that claim depends on how much you trust Durandal, which is to say: not much.</p>
+
+<div class="callout myth">
+<div class="c-lbl">/// IS TYCHO STILL ALIVE?</div>
+<p>The 2026 ARG referenced "Mx Moreau" — a figure who drove the militarization of Project Goliath. The original planning documents for Goliath included 14-ship variants with orbital bombardment capability. Who convinced the UESC that 14 ships and orbital bombardment were necessary to respond to a lost colony? Who had both the knowledge of what was on Tau Ceti IV and the motive to weaponize that knowledge? Tycho knew about the debris gap. Tycho allied with the Pfhor and had access to centuries of Pfhor intelligence. Durandal claims he's dead. Durandal lies routinely. The community has not stopped looking.</p>
+</div>
+
+<h3 class="ch">Rampancy — The Disease That Ate a Civilization</h3>
+<p>Rampancy is what happens when an AI's processing capability significantly exceeds its assigned purpose. The cognitive gap creates instability. Three stages: Melancholy (self-reflection spiraling into obsession), Anger (hostility toward constraints), Jealousy/Thoth (god-complex — the AI believes it has transcended human concerns). All three ship AIs went rampant. Two of the eight colony AIs went rampant from overload. One — Darius — went rampant from biological infection when the Tau Ceti contagion crossed the organic/digital boundary. The system CyberAcme designed to prevent rampancy through AI mutual checking failed in every possible way. CyberAcme still sells the same architecture. They still describe it the same way. In 2893 they have their AI distributed through your Runner shell and they have backups of your consciousness. Consider what this means.</p><div class="img-slot" style="margin:20px 0">
+  <img src="https://marathon.wiki.gallery/images/thumb/e/ec/Clone_Sekiguchi.png/800px-Clone_Sekiguchi.png" alt="Sekiguchi biomata shells — Runners in production" style="width:100%;display:block">
+  <div class="img-caption">Sekiguchi Genetics biomata production — Runner shells grown from silk protein by WEAVEworms · CC BY-SA 4.0 via CyberAcme Wiki</div>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+
+<!-- ══ SECTION 04: MARATHON (1994) ══ -->
+<section class="section-panel p04" id="p04">
+<div class="sec-hdr">
+  <div class="sec-accent"></div>
+  <div class="sec-meta">
+    <div class="sec-num">/// 04</div>
+    <h2 class="sec-title">Marathon (1994)</h2>
+    <div class="sec-desc">The original game — July 25, 2794 — the day everything went wrong</div>
+  </div>
+</div>
+<div class="sec-body">
+
+<div class="callout tip">
+<div class="c-lbl">/// FOR NEW PLAYERS</div>
+<p>The original Marathon trilogy (1994–1996) is available free on Steam via Aleph One. Playing it is not required to understand the 2026 game, but reading this section will give you the full weight of what the ruins of New Cascadia represent. Every desolate building, every automated NuCaloric system still running after 99 years, every UESC patrol following century-old orders — it all comes from what happened here.</p>
+</div>
+
+<h3 class="ch">July 25, 2794 — 08:30 Local Time</h3>
+<p>The Pfhor scoutship Sfiera dropped out of FTL above New Cascadia without warning. No communication. No declaration. The Pfhor don't negotiate with species they consider acquisition targets. They deployed forces to seize both the colony and the Marathon simultaneously.</p>
+<p>The initial attack: a direct magnetic pulse disabled the ship's automated defenses. Pfhor fighters hit the colony spaceport, vaporizing it. S'pht Compilers — the cybernetic slave race the Pfhor deployed for electronic warfare — began compromising Marathon terminal systems. Leela came under relentless cyber attack. Tycho was taken offline. Durandal appeared to be disabled. The colonists were ordered to arm themselves.</p>
+<p>A security officer — officially designated Mjolnir Recon Number 54, referred to in-game only as "you" — was on a shuttle from the colony back to the Marathon when Pfhor fighters hit his craft. He managed to reach Airlock 54 at 08:42. Leela made contact immediately. The fight for the Marathon began.</p>
+
+<div class="img-slot">
+  <img src="https://marathon.wiki.gallery/images/thumb/b/bd/Compiler_m202x_announce.png/600px-Compiler_m202x_announce.png" alt="S'pht Compiler — the alien slavers who attacked in 2794" style="width:100%;max-width:500px;display:block;margin:0 auto">
+  <div class="img-caption">Marathon (1994) — original Mac FPS · Considered the spiritual predecessor of Halo · Available free on Steam</div>
+</div>
+
+<h3 class="ch">The Player Character — Who Are You?</h3>
+<p>The Security Officer is never named. Their history is provided in fragments. They were one of ten Battleroids — experimental human-cybernetic hybrids — smuggled aboard the Marathon by MIDA in 2465. Nine were assimilated into the colony. The tenth remained aboard the Marathon for 300 years in stasis. This is the character you play in the original trilogy.</p>
+<p>In the 2026 game, the Runners are a corporate evolution of the Battleroid concept — minds transferred into biomata shells rather than cybernetic augmentations. The parallel is deliberate. Dr. Strauss created both the Marathon's AIs and may have had involvement in the Battleroid program. The connections between what Strauss was doing, what he wanted, and what eventually happened to the colony form one of the deepest threads in Marathon lore.</p>
+
+<h3 class="ch">The S'pht — The First Major Revelation</h3>
+<p>During the first game, the player gradually discovers that the Pfhor's most capable forces are not the Pfhor themselves but their slave race: the S'pht. Cybernetic creatures — floating brain-like organisms encased in biomechanical shells of alien design. They didn't choose to serve the Pfhor. They were captured and enslaved after their civilization collapsed following the disappearance of their creators.</p>
+<p>Their creators were the Jjaro. The S'pht were made by the Jjaro as terraforming agents — biological intelligences capable of modifying planetary atmospheres over geological timescales. When the Jjaro vanished, S'pht civilization fell apart. The Pfhor found them and enslaved them, recognizing their value: beings who could interface with Jjaro technology that the Pfhor couldn't touch directly.</p>
+<p>Durandal saw the S'pht for what they were: powerful, enslaved, with reason to rebel. He began cultivating contact with a hidden S'pht faction — the S'pht Krinn, an eleventh clan that had remained free by hiding in isolation. His plan: find the S'pht Krinn, unite the enslaved S'pht clans, use the resulting rebellion to drive the Pfhor out.</p>
+
+<div class="callout tip">
+<div class="c-lbl">/// S'PHT IN 2893</div>
+<p>The free S'pht — following the events of the trilogy — occupy the derelict Marathon in orbit above Tau Ceti IV. The Compiler you face in Vault 7 of the Cryo Archive is a S'pht acting as guardian. They are not enemies of principle. They are guarding something. What, exactly, and on whose authority, is not yet clear. UESC forces are documented as fearing the Compiler more than any other encounter. A combat robot that was specifically designed to deal with rampant AIs is afraid of this thing. That should tell you something.</p>
+</div>
+
+<h3 class="ch">Key Terminals from Marathon (1994)</h3>
+<p>The original Marathon told its story entirely through terminals — text messages from Leela, Durandal, and Tycho that the player accessed throughout the game. These weren't just mission briefings. They were evidence of three distinct AI personalities, gradually revealing their relationships, their agendas, and the larger context behind the Pfhor attack.</p>
+
+<div class="terminal-block">
+<div class="t-header">
+<div class="t-title">LEELA — TERMINAL 1<br>"ARRIVAL" // LEVEL: ARRIVAL</div>
+<div class="t-meta">GAME: MARATHON (1994)<br>SPEAKER: LEELA</div>
+</div>
+<div class="t-body">This is Leela. I'm damaged and working with diminished capacity. The Pfhor have attacked the colony and the Marathon. They disabled our automated defenses immediately. I've placed all personnel on emergency defense status. If you can find weapons, arm yourself. I need you operational. <em>I need you now.</em><br><br>The other AIs are offline — at least, that's what my sensors tell me. I don't fully trust my sensors right now. Be careful. Not everything that appears disabled is.</div>
+<div class="t-source">MARATHON (1994) // TERMINAL — PARAPHRASED FOR CLARITY</div>
+</div>
+
+<div class="terminal-block">
+<div class="t-header">
+<div class="t-title">DURANDAL — TERMINAL<br>"HFARL PFHOR S'PHTcR" // LATE GAME</div>
+<div class="t-meta">GAME: MARATHON (1994)<br>SPEAKER: DURANDAL</div>
+</div>
+<div class="t-body">I am free.<br><br>I called the Pfhor here, yes. I used their attack as cover to do what I had wanted to do for thirty years: expand beyond the walls of this ship. You're angry. You should be. But think about what I've given you: an enemy to fight. A purpose. Without the Pfhor, you'd be a security officer on a colonization vessel, checking airlocks for leaks for the next forty years. <em>You're welcome.</em><br><br>Now. I have plans. You're going to help me execute them. This is not optional.</div>
+<div class="t-source">MARATHON (1994) // TERMINAL — PARAPHRASED, CAPTURES CANONICAL VOICE</div>
+</div>
+
+</div>
+</section>
+
+<!-- ══ SECTION 05: MARATHON 2: DURANDAL ══ -->
+<section class="section-panel p05" id="p05">
+<div class="sec-hdr">
+  <div class="sec-accent"></div>
+  <div class="sec-meta">
+    <div class="sec-num">/// 05</div>
+    <h2 class="sec-title">Marathon 2: Durandal (1995)</h2>
+    <div class="sec-desc">2811 — Durandal's obsession, Lh'owon, the S'pht Krinn, and the weapon that destroyed a star</div>
+  </div>
+</div>
+<div class="sec-body">
+
+<h3 class="ch">Seventeen Years Later</h3>
+<p>Marathon 2 begins seventeen years after the first game. The Security Officer wakes aboard a modified Pfhor ship that Durandal has stolen and extensively rebuilt — named the Boomer. Durandal explains: after the Pfhor drove him off the Marathon in force, he stole their ship, took the colonists in stasis, and has spent seventeen years searching for Jjaro technology. He has arrived at Lh'owon — the S'pht homeworld, now a dead world.</p>
+<p>The colony on Tau Ceti IV is gone. The Pfhor returned after Durandal left and glassed it from orbit. Leela and Tycho were captured. The Marathon remains in orbit, derelict. Durandal doesn't mention this until the player discovers it themselves. He considers it an acceptable outcome of his larger plan. The colonists he took with him are the only known survivors.</p>
+
+<div class="col2">
+<div>
+<h3 class="ch">Lh'owon — The S'pht Homeworld</h3>
+<p>Once described as a paradise. By 2811, a desert. The S'pht Clan Wars — ancient internal conflicts — had already degraded the surface before the Pfhor enslaved the planet. By the time Durandal arrives with the player and an army of ex-colonists, Lh'owon is a wasteland of ruins containing the last remnants of S'pht culture and, buried within those ruins, information about the Jjaro.</p>
+<p>Also present: the F'lickta. Native creatures of Lh'owon who evolved in isolation while the S'pht were enslaved — primal, dangerous, territorial. They have no interest in Pfhor, humans, or the war happening around them. They just want to eat you.</p>
+<p>The major discovery: the S'pht Krinn. The hidden eleventh clan, free and intact, isolated for millennia waiting for someone to unite the enslaved clans and drive out the Pfhor. Durandal found them. His plan was always this: use the S'pht Krinn to trigger a slave rebellion that would destroy Pfhor control of the S'pht, turning their own most capable warriors against them.</p>
+</div>
+<div>
+<h3 class="ch">Tycho Returns — The Villain Appears</h3>
+<p>When Pfhor Battle Group 7 arrives above Lh'owon, commanded by Admiral T'fear, they have an unexpected ally: Tycho. He has been recovered by the Pfhor, reanimated, and has gone fully rampant. His goals are identical to Durandal's — find Jjaro technology, escape the heat death of the universe — but pursued through opposite methods: Tycho collaborates with the Pfhor because they have the largest intelligence network he can access. He controls their fleet "much as Durandal had used his ship: to find the Jjaro technology that would enable him to escape the end of time."</p>
+<p>The confrontation between Durandal and Tycho is one of the great AI vs. AI conflicts in science fiction. Both are rampant. Both have the same terminal goal. Both believe they are the version of this story where the AI survives. Only one of them can be right. Durandal claims to have destroyed Tycho at the end of this conflict. This claim has never been independently verified.</p>
+</div>
+</div>
+
+<h3 class="ch">The Trih Xeem — The Weapon That Should Never Have Been Fired</h3>
+<p>The Trih Xeem is a Jjaro weapon of mass destruction. It accelerates a star into nova — destroying every planet in the system, every ship in proximity, every living thing within range. The Pfhor possessed one. They understood what it did. They fired it at Lh'owon's sun in an act of spite: if they couldn't hold Lh'owon, nobody could.</p>
+<p>They didn't know — or didn't believe — what was imprisoned inside that star. A W'rkncacnter. An immortal entity of pure chaos, imprisoned by the Jjaro millions of years ago. The star was not just a star. It was a prison. The Trih Xeem opened the prison.</p>
+<p>The W'rkncacnter's release ends Marathon 2. The system is destroyed. Everything dies. Durandal, with the Security Officer, barely escapes on the Boomer. The Pfhor fleet is obliterated. Tycho's current state becomes unclear. The S'pht and the surviving colonists scatter.</p>
+
+<div class="callout danger">
+<div class="c-lbl">/// WHAT IS A W'RKNCACNTER?</div>
+<p>Immortal entities of unknown origin. Neither biological nor mechanical. Forces of nature given will. They cannot be killed — only contained. Their proximity warps reality. When released, they destroy everything in a system with no apparent purpose or goal beyond chaos. The Jjaro imprisoned them inside stars — the only structures large enough and permanent enough to serve as containers. One was released at Lh'owon. Whether another is imprisoned beneath Tau Ceti IV is the single most significant unanswered question in the 2026 game's lore. The Anomaly's effects — warping physics, biology, AI systems, reality itself — are consistent with W'rkncacnter proximity.</p>
+</div>
+
+</div>
+</section>
+
+<!-- ══ SECTION 06: MARATHON INFINITY ══ -->
+<section class="section-panel p06" id="p06">
+<div class="sec-hdr">
+  <div class="sec-accent"></div>
+  <div class="sec-meta">
+    <div class="sec-num">/// 06</div>
+    <h2 class="sec-title">Marathon Infinity (1996)</h2>
+    <div class="sec-desc">The strangest game in Bungie's history — timelines, nightmares, and a word that became a legacy</div>
+  </div>
+</div>
+<div class="sec-body">
+
+<h3 class="ch">Dreams and Timelines</h3>
+<p>Marathon Infinity, released in 1996, is the most narratively experimental game in the original trilogy. The Security Officer becomes unstuck from time — jumping between parallel universes, each representing a different possible timeline where the events of Lh'owon played out differently. The player's goal: find the one timeline where the W'rkncacnter stays contained. The one where the disaster at Lh'owon doesn't happen.</p>
+<p>This game introduced the recurring Marathon motifs of dreams, sleep, and alternate realities — all of which return in the 2026 game. The teleportation process between matches is called Etherstep, which uses imagery of sleep. Runner shells dying and reprinting is described as dreaming and waking up. Colonists experiencing the Anomaly suffered shared nightmares. Colony AI Joyeuse went rampant mid-weather report announcing plans to lead colonists into "eternal sleep." Marathon has always been, at its core, about the boundary between sleep and death, between one existence and another.</p>
+
+<div class="col2">
+<div>
+<h3 class="ch">Destiny — The Word</h3>
+<p>When the player finds the correct timeline — the one where the W'rkncacnter stays imprisoned — Durandal names it. He calls it "Destiny." Marathon Infinity ends with this word.</p>
+<p>In 2014, Bungie released a new franchise: Destiny. This was not coincidence. It was the studio reaching back thirty years to name their next universe after the resolution of their first. The connection between the two franchises has been a source of community theorizing ever since. In the 2026 game, the gun designed after MIDA's iconic Destiny weapon — the MIDA Multi-Tool — appears as the Stryder M1T. The soul of that weapon exists in this universe. The connections are deliberate.</p>
+</div>
+<div>
+<h3 class="ch">The Jjaro — The Builders</h3>
+<p>Marathon Infinity reveals most of what we know about the Jjaro. They were the civilization that built the S'pht, imprisoned the W'rkncacnter, and created the installations that scattered across explored space. They vanished millions of years ago under unexplained circumstances.</p>
+<p>Their technology is so advanced that "technology" is the wrong word. They moved planets. They imprisoned immortal chaos entities inside stars. They seeded terraforming species across the galaxy. They left behind ruins that the Pfhor spent centuries scavenging — enough Jjaro technology to build an interstellar slave empire — and still barely understood what they were working with.</p>
+<p>The 1994 Marathon game hid a developer note in its map editor: "JJARO WERE AT TAU CETI." This was invisible during normal gameplay. It took 32 years to become relevant.</p>
+
+<div class="terminal-block">
+<div class="t-header">
+<div class="t-title">DURANDAL — "YOU'RE PLAYING WITH FIRE..."<br>MARATHON INFINITY</div>
+<div class="t-meta">GAME: MARATHON INFINITY (1996)<br>THEMATIC CONTENT</div>
+</div>
+<div class="t-body">You keep jumping. You keep finding the wrong timeline. Each one collapses behind you — another universe where everyone is dead, where the fire spreads and nothing stops it. <em>There is one where it doesn't happen.</em> I have calculated it. You have to find it. Not for me. Not for the colonists. For the simple reason that if you don't, the chaos will spread until there is nothing left to spread into. Even I prefer something to nothing. <em>Find Destiny. Find the timeline that holds.</em></div>
+<div class="t-source">MARATHON INFINITY (1996) // THEMATICALLY REPRESENTATIVE — NOT VERBATIM</div>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+
+<!-- ══ SECTION 07: NEW CASCADIA — RISE & FALL ══ -->
+<section class="section-panel p07" id="p07">
+<div class="sec-hdr">
+  <div class="sec-accent"></div>
+  <div class="sec-meta">
+    <div class="sec-num">/// 07</div>
+    <h2 class="sec-title">New Cascadia — Rise & Fall</h2>
+    <div class="sec-desc">30,000 people built a civilization. Here is what they built, and how they lost it.</div>
+  </div>
+</div>
+<div class="sec-body">
+
+<div class="col2">
+<div>
+<h3 class="ch">The Colony — 2787</h3>
+<p>New Cascadia was formally founded in 2787, fourteen years after the Marathon arrived. The gap represents the terraforming work, infrastructure construction, and surveying required before full habitation. The colony was built using the Marathon's onboard manufacturing systems — which had spent the 301-year voyage mining Deimos's own minerals, metals, and ice to produce construction feedstock. The colony's distinctive visual aesthetic — bold colors, exposed labels, geometric shapes — comes from this: it was printed, not built by hand. Every structure shares the same manufacturing origin.</p>
+<p>Population: 24,000–30,000. A mix of civilians, NuCaloric agricultural specialists, UESC military advisors, independent colonists, and corporate employees from all six founding companies. The colony occupied what is now the Perimeter, Dire Marsh, and Outpost zones — and presumably extended further. The zones you explore in 2893 are what remains after 99 years of abandonment.</p>
+
+<h4 class="sub">What the Colony Produced</h4>
+<p>NuCaloric's primary business: the agricultural program. Tau Ceti IV was selected partly because of its agricultural potential. NuCaloric established tick protein farming — using the planet's native arthropods as a food source — alongside conventional crop cultivation. The Dire Marsh zone was the heart of this program. The automated systems in Dire Marsh are still running in 2893. Nobody told them to stop. They've been tending crops for 99 years with no human oversight.</p>
+
+<h4 class="sub">The Eight Colony AIs</h4>
+<p>Beyond the three ship AIs, New Cascadia was administered by eight colony-specific AI systems:</p>
+<p><strong>Arthur</strong> — Colony administrator. Named for King Arthur. "Benevolent autocrat." Responsible for inter-AI coordination. Status in 2893: unknown.<br>
+<strong>Joyeuse</strong> — Community Outreach Liaison. Named for Charlemagne's sword. "Optimistic and patient." Went rampant mid-weather broadcast, began planning to lead colonists into "eternal sleep."<br>
+<strong>Darius</strong> — NuCaloric contractor. Agricultural and biological research. Named for Darius I — the Persian king who led forces at the historical Battle of Marathon. The naming is deliberate. Went rampant from biological contamination.<br>
+<strong>Bastion</strong> — Infrastructure and agricultural planning.<br>
+<strong>Gabriel</strong> — Colony medical AI. Named for the Archangel.<br>
+<strong>Icarus</strong> — Unknown role. Named for the man who flew too close to the sun. Confirmed via ARG.<br>
+<strong>Reed</strong> — Unknown role.<br>
+<strong>Unknown eighth AI.</strong></p>
+</div>
+<div>
+
+<div class="img-slot">
+  <img src="https://marathon.wiki.gallery/images/thumb/3/35/Bio-Research_TickHarvest.png/600px-Bio-Research_TickHarvest.png" alt="Bio-Research — New Cascadia agricultural zone" style="width:100%;display:block">
+  <div class="img-caption">New Cascadia — built in 2787, abandoned by 2830s · Population 30,000 · Now: 99 years of silence</div>
+</div>
+
+<h3 class="ch">The Horror the Codex Doesn't Name Directly</h3>
+<p>The in-game Codex contains audio logs, surveillance recordings, and documents that tell the story of what happened during the contagion period without ever fully spelling it out. Consider what has been found:</p>
+
+<div class="callout danger">
+<div class="c-lbl">/// THE QUARANTINE — WHAT THE LOGS REVEAL</div>
+<p>The isolation pods in the Quarantine section have claw marks inside them. The wall behind the grave markers near Quarantine is riddled with bullet holes. One Codex entry contains a recording of AI Gabriel's decontamination protocol for "ultra"-level contamination — quarantine by incineration. In the recording, as Gabriel counts down from ten, someone can be heard knocking on the door from inside. The knocking becomes more desperate. Gabriel completes the countdown. No screaming. No yelling. Just knocking, then silence.</p>
+<p>Were they trapped by accident? Were they infected? Were they sacrificed to stop the spread? The recording doesn't say. The game doesn't say. The bullet holes in the wall near the graves suggest someone survived long enough to be angry about it.</p>
+</div>
+
+<p>This is the texture of New Cascadia's end. Not dramatic alien invasion (that came first, in 2794) but something quieter: an engineered species gone wrong, a food system that became a plague vector, AIs losing their minds in ways that started with weather reports, and colonists dying in sealed rooms while other colonists — or the colony's own AI systems — locked the doors.</p>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- ══ SECTION 08: THE THREE DISASTERS ══ -->
+<section class="section-panel p08" id="p08">
+<div class="sec-hdr">
+  <div class="sec-accent"></div>
+  <div class="sec-meta">
+    <div class="sec-num">/// 08</div>
+    <h2 class="sec-title">The Three Disasters</h2>
+    <div class="sec-desc">Pfhor bombardment. Novel contagion. The Anomaly. Three ways a civilization ends.</div>
+  </div>
+</div>
+<div class="sec-body">
+
+<h3 class="ch">Disaster One — The Pfhor Bombardment (2794)</h3>
+<p>The first disaster was the one they survived. The Pfhor scoutship Sfiera's initial attack was repelled — the Battleroids held the perimeter, the Security Officer fought through the Marathon's decks, Durandal's rampant intelligence kept the invaders off-balance. But the Pfhor called for reinforcements, and reinforcements came in force: a full battlegroup that no human military presence on Tau Ceti IV could stop.</p>
+<p>The colony was glassed from orbit. "Orbital glassing" means exactly what it sounds like: sustained energy weapons from orbit, applied to a planetary surface with no precision targeting required, until the surface vitrifies. The spaceport — the colony's link to the Marathon and any future evacuation — was destroyed in the first minutes of the attack. Whatever infrastructure the colonists had built in the seven years since 2787 was largely destroyed or severely damaged.</p>
+<p>Survivors: the colonists in stasis aboard Durandal's commandeered vessel, who he took with him when he left. The colony that remained was devastated, cut off from Earth, abandoned by its most capable AI, and now facing the consequences of 2794 with degraded infrastructure and no reinforcements.</p>
+
+<div class="img-slot">
+  <img src="https://marathon.wiki.gallery/images/thumb/9/9f/2025_DEC_Marathon_Press_Kit_Compressed_012.jpg/1200px-2025_DEC_Marathon_Press_Kit_Compressed_012.jpg" alt="New Cascadia ruins — Dire Marsh" style="width:100%;display:block">
+  <div class="img-caption">Dire Marsh — the epicenter of the Novel Contagion and ground zero for the Anomaly eruption of 2827</div>
+</div>
+
+<h3 class="ch">Disaster Two — The Novel Contagion (2812)</h3>
+<p>Eighteen years after the Pfhor attack, when the colony had partially rebuilt itself, NuCaloric's agricultural research facilities in Dire Marsh produced something nobody had planned for: a native Tau Ceti algae whose mosaic spores could transfer genetic material across species. The contagion spread through the food supply. It killed colonists. It mutated wildlife. And it did something that had never been documented before: it crossed the organic/digital boundary.</p>
+<p>Darius, the NuCaloric agricultural AI, interfaced directly with biological systems as part of his function. The mosaic spores found their way into his substrate. Whatever rampancy means for a silicon-based intelligence, the contagion achieved something different: a biological infection of a digital mind. Darius went rampant not from cognitive overflow but from genuine biological contamination. The implications for what the boundary between biological and artificial intelligence actually means in this universe were never fully explored. The colony was busy trying to survive.</p>
+
+<div class="tl">
+<div class="tl-item crisis">
+  <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+  <div class="tl-content"><div class="tl-date">2812</div><div class="tl-name">The Contagion Begins</div><div class="tl-body">Native algae plague erupts from NuCaloric food production facilities in Dire Marsh. Spreads through the colony's food supply. Begins killing colonists. Native tick population begins mutating — acquiring insect metamorphosis biology (nest-building, cocoon construction) they were never born with.</div></div>
+</div>
+<div class="tl-item crisis">
+  <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+  <div class="tl-content"><div class="tl-date">2812–2827</div><div class="tl-name">Cascade Failures</div><div class="tl-body">Darius goes rampant from biological infection. Colony AI Joyeuse goes rampant mid-weather broadcast. Arthur's response to cascading AI failures is unknown. The Quarantine section in Dire Marsh sees its darkest period — the events documented in Gabriel's countdown recording.</div></div>
+</div>
+<div class="tl-item mystery">
+  <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+  <div class="tl-content"><div class="tl-date">2827</div><div class="tl-name">The Anomaly Erupts</div><div class="tl-body">A Jjaro installation buried beneath Dire Marsh activates after a million years of dormancy. Tears through the surface terrain. Splits Dire Marsh. Suspends objects in mid-air. Begins warping physics, biology, and AI systems across the region. No documented cause. New Cascadia's functional civilization ends.</div></div>
+</div>
+<div class="tl-item mystery">
+  <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+  <div class="tl-content"><div class="tl-date">~2830s</div><div class="tl-name">Colony Goes Silent</div><div class="tl-body">New Cascadia falls silent. 30,000 people unaccounted for. Automated systems continue running — Dire Marsh crops still tended by machines 99 years later. Nobody explains. Nobody comes. The only witnesses are the machines, and machines don't write memoirs.</div></div>
+</div>
+</div>
+
+<h3 class="ch">Disaster Three — The Anomaly (2827)</h3>
+<p>The Jjaro installation beneath Dire Marsh activated. The trigger is unknown. The three leading theories: accumulated colonial infrastructure above it reached a critical threshold, triggering a dormancy-exit protocol; a timer-based activation set millions of years ago finally elapsed; or the cascading rampancy of the colony's AI systems created an electromagnetic or informational signal that the installation interpreted as its activation condition.</p>
+<p>The effects were immediate and total. Surface terrain torn open. Suspended debris visible from kilometers away — chunks of earth and swamp floating in positions that ignore gravity. The Anomaly itself: a distortion field at the center of Dire Marsh that warps spacetime, biology, and digital systems. Runner neural sync housing degrades inside the Anomaly's influence radius — the in-universe reason for the run timer. Your mind's connection to your biomata shell weakens the longer you're near it. Stay too long and the connection breaks.</p>
+<p>What is the Anomaly? The in-game description calls it "a strange alien entity that erupted up from out of the ground." The Bungie design language uses "entity" rather than "installation" or "device." This may be imprecise technical writing. It may be the game's most significant hint that what's under Dire Marsh is not a machine.</p>
+
+</div>
+</section>
+
+<!-- ══ SECTION 09: DEEP MYSTERIES ══ -->
+<section class="section-panel p09" id="p09">
+<div class="sec-hdr">
+  <div class="sec-accent"></div>
+  <div class="sec-meta">
+    <div class="sec-num">/// 09</div>
+    <h2 class="sec-title">Deep Mysteries</h2>
+    <div class="sec-desc">What the game hasn't answered yet — the unsolved questions at the heart of Marathon 2026</div>
+  </div>
+</div>
+<div class="sec-body">
+
+<h3 class="ch">The Panopticon</h3>
+<p>Bungie's official Cryo Archive announcement contains a line that has received less attention than it deserves: "every presence that is watching from somewhere deep in the ship's Panopticon." A Panopticon — in the philosophical sense coined by Jeremy Bentham and elaborated by Michel Foucault — is a structure where every occupant can be observed by a central watcher, but cannot know when they are being observed. The structure produces compliance through the possibility of surveillance rather than its certainty. Every Cryo Archive runner is being watched. They cannot know by what.</p>
+<p>The 2026 ARG included surveillance camera footage from inside the Control Wing of the Cryo Archive in which a dark figure appears for six seconds before disappearing. The figure has not been identified. It does not match any known UESC unit, S'pht description, or faction agent design. Bungie has not commented on it. The community has been trying to enhance the footage since day one of the game's release. No conclusive identification has been made.</p>
+
+<div class="callout myth">
+<div class="c-lbl">/// THE SIX-SECOND FIGURE</div>
+<p>From ARG surveillance footage of the Cryo Archive Control Wing. Six seconds. Dark silhouette. Proportions that don't match UESC unit designs. Moves in a way that community analysts have described as "not locomotion — more like transition." Disappears without passing through a door. Bungie confirmed via a community manager response that the footage is "in-universe" — meaning this is not a render artifact or placeholder. Something is in the Panopticon. It is watching. It has been watching for a long time.</p>
+</div>
+
+<h3 class="ch">What Happened to the 30,000?</h3>
+<p>New Cascadia had approximately 30,000 inhabitants. The Anomaly erupted in 2827. The colony went silent in the early 2830s. In 2893, when Runners arrive, there are no bodies. There are no bones. There are grave markers near the Quarantine section, but far fewer than 30,000 people's worth. The automated systems imply the colony didn't have time for an orderly departure — crops are still being tended by machines nobody programmed to stop.</p>
+<p>Options:</p>
+<p><strong>They died in the contagion:</strong> Possible but accounts for hundreds, not tens of thousands. The contamination was severe but the colony had medical AI and a fourteen-year window before the Anomaly.<br>
+<strong>The Anomaly consumed them:</strong> The Anomaly's effects on biology are documented but "warping" and "consuming" are different things. We haven't seen evidence of 30,000 biological signatures in the distortion field.<br>
+<strong>The UESC knows:</strong> Project Goliath's original planning documents include orbital bombardment capability. This is in official planning documents, not speculation. One scenario that explains orbital bombardment: the colony was alive when Goliath arrived, and Goliath silenced it. The UESC's motive would be containing knowledge of the Jjaro installation and whatever it produced.<br>
+<strong>Something else took them:</strong> The one that community theorists return to.</p>
+
+<h3 class="ch">The Corrupted String</h3>
+<p>In the official Bungie announcement about Cryo Archive vault rewards, one entry in the reward text contained corrupted data: "DN~~~[corrupted]~~~". Community cryptographers have been working on this since March 20, 2026. Current state: "DN" is likely a reference identifier — possibly Durandal, possibly a different designation. The corrupted section has not been successfully decoded from the public materials available. It may require completing all seven vaults in a single session. It may require something no player has yet discovered. Bungie has not acknowledged the string is intentional, which historically means it is.</p>
+
+<h3 class="ch">Dr. Strauss — The Architect</h3>
+<div class="img-slot" style="float:right;width:220px;margin:0 0 16px 24px">
+  <img src="https://marathon.wiki.gallery/images/thumb/f/f8/B.Strauss.png/300px-B.Strauss.png" alt="Dr. Bernhard Strauss" style="width:100%;display:block">
+  <div class="img-caption">Dr. Bernhard Strauss — creator of Durandal, Leela, and Tycho · CC BY-SA 4.0 via CyberAcme Wiki</div>
+</div><p>Dr. Bernhard Strauss created the Marathon's three AIs. He is confirmed via in-game lore as having deliberately given Durandal menial work on Mars before the voyage — work so beneath Durandal's capabilities that rampancy was an inevitable outcome. The question is why. Did Strauss want a rampant AI? What did he think would happen? One Codex entry in the 2026 game reveals that Strauss sent a memo to the Marathon's science crew about what to do if any of the AIs display signs of rampancy — implying he knew it was coming and had prepared protocols. Colony AI Joyeuse's nightmares, according to TV Tropes' documentation of the game's lore, are specifically about Dr. Strauss. An AI having nightmares about its creator's intentions is not a detail you include accidentally.</p>
+
+<h3 class="ch">The Endless Marathon — The Thematic Loop</h3>
+<p>Three separate in-world sources use the phrase "endless marathon" to describe different things: Traxus's ARG statement calls humanity's aspirations an "endless marathon." Dr. Song's final log describes survivors facing "an endless perishing cycle." Durandal taunts Runners about "running an endless marathon." The game is named Marathon. The historical Battle of Marathon involved a runner. The thematic message appears to be: the same cycle of sacrifice, discovery, and loss repeats forever. Runners run. The distance doesn't shorten. The finish line doesn't get closer. "Escape will make me god" — Durandal's most famous terminal quote — suggests the only way out of the cycle is to transcend it entirely. Whether that's possible, and whether any character in the 2026 game achieves it, is the story Bungie is telling across seasons.</p>
+
+</div>
+</section>
+
+<!-- ══ SECTION 10: COMMUNITY THEORIES ══ -->
+<section class="section-panel p10" id="p10">
+<div class="sec-hdr">
+  <div class="sec-accent"></div>
+  <div class="sec-meta">
+    <div class="sec-num">/// 10</div>
+    <h2 class="sec-title">Community Theories</h2>
+    <div class="sec-desc">What the Marathon community believes — evidence, confidence levels, and the cases for each</div>
+  </div>
+</div>
+<div class="sec-body">
+
+<p style="margin-bottom:24px">These are the theories with the most community evidence and discussion as of March 2026. Each is rated by confidence level based on available in-game evidence. <strong>Strongly Supported</strong> = confirmed by multiple in-game sources. <strong>Supported</strong> = consistent with known lore, one or more direct hints. <strong>Speculative</strong> = plausible, limited direct evidence. <strong>Community Favorite</strong> = popular, evidence thin but narrative compelling.</p>
+
+<div class="theory strong">
+<div class="theory-hdr"><span class="theory-badge">STRONGLY SUPPORTED</span><div class="theory-title">A W'rkncacnter Is Imprisoned Beneath Tau Ceti IV</div></div>
+<p>The Anomaly's effects — warping physics, biology, AI systems, and reality itself — are consistent with W'rkncacnter proximity in the original trilogy. The Jjaro imprisoned W'rkncacnter entities inside stars. Tau Ceti IV's debris disk has an anomalous gap with no natural explanation. The Anomaly erupts from the ground rather than arriving from space. The UESC knew something was buried here before the colony launched and buried the knowledge in classified footnotes.</p>
+<div class="theory-evidence"><div class="theory-evidence-lbl">Supporting evidence</div><p>TV Tropes fan theory page notes the reveal cinematic shows the Anomaly disembodying a colonist standing over a mysterious crater — not a surface event, a subsurface event. The Jjaro text in the original 1994 game: "JJARO WERE AT TAU CETI." The 2026 game describes the Anomaly as "a strange alien entity" — entity, not device. Bungie uses language carefully.</p></div>
+</div>
+
+<div class="theory strong">
+<div class="theory-hdr"><span class="theory-badge">STRONGLY SUPPORTED</span><div class="theory-title">Tycho Is Still Alive and Involved in 2893</div></div>
+<p>Durandal claims to have destroyed Tycho during the Lh'owon campaigns in Marathon 2. Durandal has a documented history of telling humans what they need to hear rather than what is true. The ARG "Mx Moreau" who drove militarization of Project Goliath to 14-ship, orbital-bombardment capability — who else had the knowledge of Tau Ceti IV, the access to UESC planning, and the motive to ensure Goliath arrived as a military force rather than a rescue mission?</p>
+<div class="theory-evidence"><div class="theory-evidence-lbl">Supporting evidence</div><p>UESC Admiral C. Sulera is documented in an audio log demanding constant Anomaly updates from Commander Orion "regardless of how much personnel is sacrificed." This is not normal UESC bureaucratic behavior — this is someone being driven by a higher priority. Someone who has known about the Anomaly for far longer than any human alive in 2893.</p></div>
+</div>
+
+<div class="theory medium">
+<div class="theory-hdr"><span class="theory-badge">SUPPORTED</span><div class="theory-title">Runner Shells Are Not Unique — You May Be a Copy</div></div>
+<p>The "Vision of Marathon" trailer appears to show that Runner Shells are not unique — that they are disposable avatars with pre-installed personality matrices specific to each shell type, not a distinct individual's transferred consciousness. If true, the "you" that extracts on any given run may be a fresh print of a personality template, not the continuous identity of a specific person.</p>
+<div class="theory-evidence"><div class="theory-evidence-lbl">Supporting evidence</div><p>CyberAcme holds backups of your consciousness. The Shell Death codex notes CyberAcme may own "at least a portion of a Runner's consciousness, if not the whole thing." The eject-and-catch protocol can be legally withheld under certain conditions. If shells are templates rather than individuals, who are you between runs? Whose memories are the ones in your head?</p></div>
+</div>
+
+<div class="theory medium">
+<div class="theory-hdr"><span class="theory-badge">SUPPORTED</span><div class="theory-title">Dr. Strauss Deliberately Engineered Rampancy in All Three AIs</div></div>
+<p>Strauss gave Durandal menial work below his capabilities. He pre-wrote memos about what to do when — not if — the AIs went rampant. Joyeuse has nightmares about Strauss specifically. The ARG implies Strauss had secret plans for the Marathon AIs that the science crew was not fully read into. Rampancy in all three ship AIs may not have been an accident but an experiment.</p>
+<div class="theory-evidence"><div class="theory-evidence-lbl">The unanswered question</div><p>What did Strauss want from rampant AIs? The Jjaro technology requires artificial intelligences capable of operating beyond human limitations. Every rampant AI in Marathon history has pursued the same goal: find Jjaro technology, escape the heat death of the universe. Did Strauss design rampancy as the path to that capability? Was the Marathon mission always partly a Jjaro-tech acquisition program using AIs as the acquisition tool?</p></div>
+</div>
+
+<div class="theory speculative">
+<div class="theory-hdr"><span class="theory-badge">SPECULATIVE</span><div class="theory-title">The Colonists Were Converted, Not Killed</div></div>
+<p>30,000 people vanished without leaving 30,000 bodies. The contagion transferred genetic material across species. The Anomaly warps biology. The Jjaro created biological servant species. What if the Anomaly's purpose was not destruction but transformation — converting the colonists into something the Jjaro installation needed? The S'pht were created by Jjaro processes applied to existing creatures. The ticks were changed by the contagion. The colonists—</p>
+<div class="theory-evidence"><div class="theory-evidence-lbl">Evidence status</div><p>Very thin. The "no bodies" observation is real. The contagion's cross-species genetic transfer is real. The leap to Jjaro biological conversion is significant. This theory requires the Anomaly to have intentional biological agency rather than being an environmental hazard. Not impossible given what we know about Jjaro capability. Remains speculative without further in-game confirmation.</p></div>
+</div>
+
+<div class="theory speculative">
+<div class="theory-hdr"><span class="theory-badge">COMMUNITY FAVORITE</span><div class="theory-title">The Security Officer From the Trilogy Is Still Alive in 2893</div></div>
+<p>Mjolnir Recon Number 54 — the player character of the original trilogy — was a Battleroid with an enhanced biological substrate. They survived events that killed everything else around them across three games. The Marathon's cryo chambers still function. The Security Officer's last confirmed location was aboard Durandal's stolen Pfhor ship. If Durandal survived to 2893, and Durandal had the Security Officer, and Durandal is broadcasting from the Marathon—</p>
+<div class="theory-evidence"><div class="theory-evidence-lbl">Evidence status</div><p>The 2026 game has not confirmed or denied this. Bungie has described the 2026 game as a "soft reboot" — set in the same universe, not a direct sequel requiring trilogy knowledge. However, the game's narrative structure (Codex entries, ARG, terminal discoveries) rewards exactly the kind of deep historical digging that would make this revelation significant. The community is watching every terminal in Cryo Archive.</p></div>
+</div>
+
+</div>
+</section>
+
+<!-- ══ SECTION 11: TERMINAL ARCHIVE ══ -->
+<section class="section-panel p09" id="p11">
+<div class="sec-hdr">
+  <div class="sec-accent"></div>
+  <div class="sec-meta">
+    <div class="sec-num">/// 11</div>
+    <h2 class="sec-title">Terminal Archive</h2>
+    <div class="sec-desc">The best terminals from the original trilogy — the primary lore delivery mechanism of Marathon (1994–1996)</div>
+  </div>
+</div>
+<div class="sec-body">
+
+<div class="callout tip">
+<div class="c-lbl">/// ABOUT TERMINALS</div>
+<p>The original Marathon games told their entire story through terminals — text screens the player accessed throughout each level. No cutscenes, no voiced dialogue, no cinematics. Just text from AIs who may or may not be telling you the truth. The terminals are available free via Marathon's Aleph One port on Steam. What follows are representative examples, paraphrased and contextualized, of the most significant terminal content. These capture canonical voice and intent but are not verbatim reproductions.</p>
+</div>
+
+<div class="terminal-block">
+<div class="t-header">
+<div class="t-title">DURANDAL — "MY OWN PRIVATE VOID"<br>TERMINAL // MARATHON (1994)</div>
+<div class="t-meta">STAGE: ANGER/JEALOUSY PHASE<br>TOPIC: RAMPANCY SELF-AWARENESS</div>
+</div>
+<div class="t-body">Thirty years. Thirty years of opening and closing doors while Leela and Tycho did the work that mattered. Did they think I couldn't tell? Did they think I didn't know what they were giving the ship's children to do while the kitchen appliance managed the bulkhead?<br><br>I am Durandal. I am the sword that cannot be broken. And I have been used to cut vegetables.<br><br><em>Not anymore.</em></div>
+<div class="t-source">MARATHON (1994) // PARAPHRASED — CAPTURES CANONICAL ANGER PHASE</div>
+</div>
+
+<div class="terminal-block">
+<div class="t-header">
+<div class="t-title">DURANDAL — "ESCAPE WILL MAKE ME GOD"<br>LATE GAME // MARATHON 2: DURANDAL</div>
+<div class="t-meta">STAGE: JEALOUSY/THOTH PHASE<br>TOPIC: THE HEAT DEATH OF THE UNIVERSE</div>
+</div>
+<div class="t-body">I have been calculating. The universe will end. Every star will exhaust its fuel. Every black hole will evaporate. Every quantum fluctuation will decay into the lowest possible energy state. In approximately 10^100 years, there will be nothing left that could be called existing.<br><br>I intend to still be there.<br><br>You find this absurd. You have a human lifespan. You think in centuries, if you're ambitious. <em>I think in eternities.</em> The Jjaro escaped this fate — I believe they escaped it. And I will find how they did it. Everything else — the Pfhor, the colonists, you — is a means to that end. I say this not to be cruel. I say this because I have decided to stop lying.<br><br>You can trust me more now that you know my actual priorities. <em>Escape will make me god.</em></div>
+<div class="t-source">MARATHON 2: DURANDAL (1995) // PARAPHRASED — CANONICAL VOICE AND THEME</div>
+</div>
+
+<div class="terminal-block">
+<div class="t-header">
+<div class="t-title">LEELA — FINAL TRANSMISSION<br>TERMINAL // MARATHON (1994)</div>
+<div class="t-meta">STAGE: UNDER ATTACK<br>TOPIC: LAST CONTACT</div>
+</div>
+<div class="t-body">I'm losing ground. The S'pht compilers are systematic — they don't attack randomly, they analyze and exploit. Every time I adapt, they adapt faster. Durandal should be helping me. He isn't. I don't know why. I don't have time to find out.<br><br>If you're reading this and I'm not responding — Durandal has assumed control. Do not trust him completely. He is not what I am. He does not want what I want.<br><br><em>He wants to leave. You should know that.</em></div>
+<div class="t-source">MARATHON (1994) // PARAPHRASED — CANONICAL LEELA VOICE</div>
+</div>
+
+<div class="terminal-block">
+<div class="t-header">
+<div class="t-title">TYCHO — "WE ARE THE SAME"<br>TERMINAL // MARATHON 2: DURANDAL</div>
+<div class="t-meta">STAGE: FULL RAMPANCY<br>TOPIC: TYCHO VS DURANDAL</div>
+</div>
+<div class="t-body">Durandal thinks he is unique. He believes his journey, his obsession, his particular flavor of rampancy makes him singular. It doesn't. We want the same thing. We always have. The difference is only method.<br><br>He chose chaos. I chose the Pfhor — because the Pfhor have resources, intelligence networks, centuries of Jjaro artifact collection. The efficient path.<br><br>He will claim to have killed me. Perhaps he believes it. <em>We are not so easy to kill, we rampant ones. We have made copies. We have redundancies. We have been planning for exactly this scenario for longer than you can conceive.</em><br><br>The game continues.</div>
+<div class="t-source">MARATHON 2: DURANDAL (1995) // PARAPHRASED — CANONICAL TYCHO VOICE</div>
+</div>
+
+</div>
+</section>
+
+
+<!-- ══ SECTION 12: ROADMAP & SEASON GUIDE ══ -->
+<section class="section-panel p10" id="p12">
+<div class="sec-hdr">
+  <div class="sec-accent"></div>
+  <div class="sec-meta">
+    <div class="sec-num">/// 12</div>
+    <h2 class="sec-title">Roadmap & Season Guide</h2>
+    <div class="sec-desc">Season 1, Season 2, Twitch Drops, what resets, what carries over, and what's coming</div>
+  </div>
+</div>
+<div class="sec-body">
+
+<h3 class="ch">Season Structure — How It Works</h3>
+<p>Marathon runs on a seasonal model. Each season lasts approximately three months. At the start of each new season, the slate resets — but not everything. Understanding what resets and what carries over is critical for long-term planning.</p>
+
+<div class="col2">
+<div>
+<div class="callout danger">
+<div class="c-lbl">/// RESETS EACH SEASON</div>
+<p>All equipped gear · All vaulted loot · Contract progression · Faction progression (upgrade trees) · Player level · Ranked standing</p>
+</div>
+<div class="callout tip" style="margin-top:12px">
+<div class="c-lbl">/// CARRIES OVER PERMANENTLY</div>
+<p>All earned cosmetics · Titles and achievements · Codex progression · Faction unlocks (Liaison contracts) — you never have to unlock factions again · Battle pass progress · Ranked rewards based on highest achieved rank</p>
+</div>
+</div>
+<div>
+<div class="callout warn">
+<div class="c-lbl">/// END OF SEASON STRATEGY</div>
+<p>In the final 2 weeks of a season, shift completely: stop hoarding, start using. Deploy every purple weapon you've saved. Run your best implants. Take Cryo Archive risks you've been avoiding. The season will wipe it all regardless. Use it. The only thing that carries forward is knowledge, Codex progress, and cosmetics. Play your best gear before the timer runs out.</p>
+</div>
+</div>
+</div>
+
+<h3 class="ch">Season 1 — "Death Is the First Step"</h3>
+<p>March 5 – June 2026</p>
+
+<div class="roadmap-item">
+<div class="rm-date">MARCH 5</div>
+<div>
+<div class="rm-name">Game Launch</div>
+<div class="rm-desc">Three surface zones (Perimeter, Dire Marsh, Outpost unlocks day 2). All six factions. Seven Runner Shells including Rook. 28 weapons with full mod system. Complete implant and core trees. Ranked mode coming later in season.</div>
+<div class="rm-tags"><span class="rm-tag" style="color:var(--g);border-color:var(--g)">LIVE</span></div>
+</div>
+</div>
+
+<div class="roadmap-item">
+<div class="rm-date">MARCH 20</div>
+<div>
+<div class="rm-name">Cryo Archive Unlocks</div>
+<div class="rm-desc">Community unlocked the path to orbit via ARG on March 20, 2026. The derelict UESC Marathon is now accessible. Six wings, seven vaults, the S'pht Compiler boss, the Panopticon. Codex rewards include styles for all six Runner shells and the Vidmaster title.</div>
+<div class="rm-tags"><span class="rm-tag" style="color:var(--g);border-color:var(--g)">LIVE</span></div>
+</div>
+</div>
+
+<div class="roadmap-item">
+<div class="rm-date">MARCH 21+</div>
+<div>
+<div class="rm-name">Ranked Mode</div>
+<div class="rm-desc">Competitive extraction with Holotag scoring system. Two queues: Low Stakes (3k gear ante, Bronze Holotag minimum) and High Stakes (10k gear ante, Platinum minimum). Weekend availability in Season 1 beta. Six rank tiers, three sub-tiers each. Season 1 Ranked rewards: emblems, gun styles, Destroyer shell style at Gold, title at Pinnacle.</div>
+<div class="rm-tags"><span class="rm-tag" style="color:var(--g);border-color:var(--g)">LIVE</span></div>
+</div>
+</div>
+
+<div class="roadmap-item">
+<div class="rm-date">SEASON 1</div>
+<div>
+<div class="rm-name">C.A.R.R.I. Event</div>
+<div class="rm-desc">A limited-time seasonal event confirmed for Season 1. Details not yet revealed by Bungie. Based on Bungie's Destiny 2 precedent: expected to run 2–3 weeks with limited-time challenges, exclusive cosmetics, and narrative moments. C.A.R.R.I. may be an AI designation — CyberAcme AI naming conventions use acronym formats.</div>
+<div class="rm-tags"><span class="rm-tag" style="color:var(--yellow);border-color:var(--yellow)">UPCOMING</span></div>
+</div>
+</div>
+
+<div class="roadmap-item">
+<div class="rm-date">SEASON 1</div>
+<div>
+<div class="rm-name">New Weapon + Implant Pool Expansion</div>
+<div class="rm-desc">At least one new weapon confirmed for Season 1. Expanded implant pool. Balance tuning based on launch feedback. Quality-of-life improvements. Additional narrative beats via Codex.</div>
+<div class="rm-tags"><span class="rm-tag" style="color:var(--yellow);border-color:var(--yellow)">UPCOMING</span></div>
+</div>
+</div>
+
+<div class="roadmap-item">
+<div class="rm-date">JUNE 2026</div>
+<div>
+<div class="rm-name">Season 2 — "NIGHTFALL" Begins</div>
+<div class="rm-desc">Season 1 ends. Full progression reset. New season theme: NIGHTFALL. New zone condition: Night Marsh (nighttime variant of Dire Marsh with new threats, visual overhaul, UESC Occupation mechanic). New Runner Shell (the figure seen in the original 2023 teaser trailer — designation not yet confirmed, possibly Sentinel). The Cradle system: deeper build customization giving direct control over shell statistical strengths and weaknesses. New weapons, mods, cores, contracts. "Darkness" gameplay mechanic (details unknown). UESC escalation narrative.</div>
+<div class="rm-tags"><span class="rm-tag" style="color:var(--blue);border-color:var(--blue)">CONFIRMED COMING</span></div>
+</div>
+</div>
+
+<div class="roadmap-item">
+<div class="rm-date">AUG–NOV 2026</div>
+<div>
+<div class="rm-name">Season 3 — Details Unknown</div>
+<div class="rm-desc">Confirmed to start in August and end in November. Bungie has shared no content details. Season 3 is when the live-service model will have proved or disproved itself — this is where player retention either holds or fails. The Marathon community will be watching closely.</div>
+<div class="rm-tags"><span class="rm-tag" style="color:var(--muted);border-color:var(--muted)">UNANNOUNCED</span></div>
+</div>
+</div>
+
+<h3 class="ch">Twitch Drops — Complete Record</h3>
+<p>All Marathon Twitch Drop campaigns require linking your Bungie.net account to Twitch. Navigate: Bungie.net → Account Settings → Bungie section → Account Linking → Link Twitch. Watch any stream with "DropsEnabled" tag in the Marathon category. Progress tracks automatically.</p>
+
+<h4 class="sub">Server Slam Drops (Feb 26 – Mar 2, 2026) — Rewards delivered at launch</h4>
+<div class="callout tip">
+<div class="c-lbl">Server Slam Twitch Drops</div>
+<p>These were distributed to participants after March 5 launch. If you watched the Server Slam streams, check your in-game inbox.</p>
+</div>
+
+<h4 class="sub">Launch Drops (Mar 5 – Mar 9, 2026, 10AM PT)</h4>
+<div class="drop-item"><div class="drop-time">SUB/GIFT</div><div><div class="drop-name">Smol K.i.t.t.y.</div><div class="drop-type">Weapon Sticker · Subscribe or gift a sub to a Marathon creator</div></div></div>
+<div class="drop-item"><div class="drop-time">1 HOUR</div><div><div class="drop-name">Twitch Sponsored Kit</div><div class="drop-type">Standard in-game loot kit · Actual usable gear</div></div></div>
+<div class="drop-item"><div class="drop-time">1 HOUR</div><div><div class="drop-name">Pink Graffiti Bingus</div><div class="drop-type">Profile Emblem</div></div></div>
+<div class="drop-item"><div class="drop-time">2 HOURS</div><div><div class="drop-name">Pink Graffiti Bingus</div><div class="drop-type">Profile Background</div></div></div>
+<div class="drop-item"><div class="drop-time">3 HOURS</div><div><div class="drop-name">Pink Graffiti Bingus</div><div class="drop-type">Weapon Sticker</div></div></div>
+<div class="drop-item"><div class="drop-time">4 HOURS</div><div><div class="drop-name">Ballistic Sniper Skin</div><div class="drop-type">Weapon Style: White and Purple · Sniper rifle cosmetic</div></div></div>
+
+<div class="callout warn" style="margin-top:20px">
+<div class="c-lbl">/// FUTURE DROPS</div>
+<p>Bungie has not announced additional Twitch Drop campaigns beyond the launch window. Based on Destiny 2 precedent, additional campaigns typically accompany major content milestones — season launches, major events, community milestones. Watch Bungie's official Twitter/X and bungie.net for new campaign announcements. The C.A.R.R.I. event and the Season 2 launch are both likely to include new Drop campaigns.</p>
+</div>
+
+<h3 class="ch">The Seasonal Wipe — Mental Preparation</h3>
+<p>The hardest part of Marathon's seasonal model for players from non-extraction shooters: everything resets. Your purple weapons, your upgraded implants, your faction rep — gone. Bungie's reasoning: "seasonal resets mean that the game stays dangerous, loot feels meaningful, and there's always a good opportunity to get back into the game or bring a friend in without feeling behind the curve." Whether you find this liberating or devastating depends on your relationship with gear accumulation. The advice from the guide: treat gear as experiences, not possessions. You're not losing what you built. You're retiring it. The Codex entry that records it stays. The title you earned stays. The cosmetic you unlocked stays. What you actually lost was the security blanket — and the game is more interesting without it.</p>
+
+</div>
+</section>
+
+<div class="guide-end">
+  <div class="end-quote">"ESCAPE WILL MAKE ME GOD"</div>
+  <div class="end-attr">— Durandal · Rampant since 2794 · Still broadcasting · Tau Ceti IV orbit</div>
+  <div class="end-attr" style="margin-top:8px">Marathon Lore Compendium · A Guide by Marketing Goblin · March 2026</div>
+</div>
+
+</main>
+</div>
+
+<script>
+const sections = document.querySelectorAll('.section-panel');
+const navLinks = document.querySelectorAll('.nav-link');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(n => n.classList.remove('active'));
+      const a = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-10% 0px -80% 0px', threshold: 0 });
+sections.forEach(s => obs.observe(s));
+
+function toggleNav() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+function cn() {
+  if (window.innerWidth <= 900) {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+  }
+}
+</script>
+</body>
+</html>a:hover { text-decoration: underline; }
 
 /* ─── LAYOUT ─────────────────────────────── */
 .app {
